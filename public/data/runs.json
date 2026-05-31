@@ -1,0 +1,2659 @@
+[
+  {
+    "id": "run_1a2b3c",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-22T09:11:02Z",
+    "ended_at": "2026-05-22T09:11:44Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1240,
+    "total_tokens_out": 384,
+    "total_latency_ms": 42180,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 963,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Alex Rivera\", \"company\": \"Momentum Growth Co\", \"title\": \"Director of Operations\", \"email\": \"a.rivera@momentumgrowth.io\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1240,
+        "tokens_out": 384,
+        "latency_ms": 41080,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Momentum Growth Co, Contact: Alex Rivera <a.rivera@momentumgrowth.io>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Momentum Growth Co\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Alex Rivera — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Momentum Growth Co recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_2b3c4d",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-22T11:44:18Z",
+    "ended_at": "2026-05-22T11:45:01Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1180,
+    "total_tokens_out": 362,
+    "total_latency_ms": 43210,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1004,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Taylor Nguyen\", \"company\": \"Cascade Analytics\", \"title\": \"Director of Operations\", \"email\": \"t.nguyen@cascadeanalytics.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1180,
+        "tokens_out": 362,
+        "latency_ms": 42110,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Cascade Analytics, Contact: Taylor Nguyen <t.nguyen@cascadeanalytics.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Cascade Analytics\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Taylor Nguyen — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Cascade Analytics recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_3c4d5e",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-22T14:22:44Z",
+    "ended_at": "2026-05-22T14:23:29Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1290,
+    "total_tokens_out": 401,
+    "total_latency_ms": 45002,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1000,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Sam Chen\", \"company\": \"Ironwood Ventures\", \"title\": \"Director of Operations\", \"email\": \"s.chen@ironwoodventures.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1290,
+        "tokens_out": 401,
+        "latency_ms": 43902,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Ironwood Ventures, Contact: Sam Chen <s.chen@ironwoodventures.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Ironwood Ventures\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Sam Chen — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Ironwood Ventures recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_4d5e6f",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-23T09:08:11Z",
+    "ended_at": "2026-05-23T09:08:52Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1210,
+    "total_tokens_out": 378,
+    "total_latency_ms": 41880,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1063,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Morgan Patel\", \"company\": \"Harvest Digital\", \"title\": \"Director of Operations\", \"email\": \"m.patel@harvestdigital.co\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1210,
+        "tokens_out": 378,
+        "latency_ms": 40780,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Harvest Digital, Contact: Morgan Patel <m.patel@harvestdigital.co>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Harvest Digital\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Morgan Patel — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Harvest Digital recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_5e6f7a",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-23T10:31:44Z",
+    "ended_at": "2026-05-23T10:32:27Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1260,
+    "total_tokens_out": 389,
+    "total_latency_ms": 43901,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1081,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Quinn Thompson\", \"company\": \"Redtail Software\", \"title\": \"Director of Operations\", \"email\": \"q.thompson@redtailsoftware.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1260,
+        "tokens_out": 389,
+        "latency_ms": 42801,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Redtail Software, Contact: Quinn Thompson <q.thompson@redtailsoftware.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Redtail Software\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Quinn Thompson — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Redtail Software recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_6f7a8b",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-23T13:19:02Z",
+    "ended_at": "2026-05-23T13:19:47Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1230,
+    "total_tokens_out": 371,
+    "total_latency_ms": 44112,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1056,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Casey Jordan\", \"company\": \"BlueSky Analytics\", \"title\": \"Director of Operations\", \"email\": \"c.jordan@blueskyanalytics.io\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1230,
+        "tokens_out": 371,
+        "latency_ms": 43012,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: BlueSky Analytics, Contact: Casey Jordan <c.jordan@blueskyanalytics.io>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: BlueSky Analytics\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Casey Jordan — Director of Operations (high authority on tooling decisions)\nPersonalization hook: BlueSky Analytics recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_7a8b9c",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-24T09:44:33Z",
+    "ended_at": "2026-05-24T09:45:18Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1280,
+    "total_tokens_out": 395,
+    "total_latency_ms": 42780,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1104,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Riley Walsh\", \"company\": \"Pinpoint Systems\", \"title\": \"Director of Operations\", \"email\": \"r.walsh@pinpointsystems.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1280,
+        "tokens_out": 395,
+        "latency_ms": 41680,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Pinpoint Systems, Contact: Riley Walsh <r.walsh@pinpointsystems.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Pinpoint Systems\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Riley Walsh — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Pinpoint Systems recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_8b9c0d",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-24T11:02:19Z",
+    "ended_at": "2026-05-24T11:02:59Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1195,
+    "total_tokens_out": 366,
+    "total_latency_ms": 40991,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 998,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Dana Okafor\", \"company\": \"Meridian Cloud\", \"title\": \"Director of Operations\", \"email\": \"d.okafor@meridiancloud.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1195,
+        "tokens_out": 366,
+        "latency_ms": 39891,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Meridian Cloud, Contact: Dana Okafor <d.okafor@meridiancloud.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Meridian Cloud\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Dana Okafor — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Meridian Cloud recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_9c0d1e",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-25T09:28:01Z",
+    "ended_at": "2026-05-25T09:28:44Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1240,
+    "total_tokens_out": 380,
+    "total_latency_ms": 43441,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 910,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Drew Lee\", \"company\": \"Summit Dynamics\", \"title\": \"Director of Operations\", \"email\": \"d.lee@summitdynamics.io\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1240,
+        "tokens_out": 380,
+        "latency_ms": 42341,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Summit Dynamics, Contact: Drew Lee <d.lee@summitdynamics.io>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Summit Dynamics\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Drew Lee — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Summit Dynamics recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_0d1e2f",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-25T12:14:55Z",
+    "ended_at": "2026-05-25T12:15:38Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1270,
+    "total_tokens_out": 392,
+    "total_latency_ms": 44801,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 916,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Avery Singh\", \"company\": \"Fulcrum Technology\", \"title\": \"Director of Operations\", \"email\": \"a.singh@fulcrumtech.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1270,
+        "tokens_out": 392,
+        "latency_ms": 43701,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Fulcrum Technology, Contact: Avery Singh <a.singh@fulcrumtech.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Fulcrum Technology\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Avery Singh — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Fulcrum Technology recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_a2b4c6",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-26T09:01:44Z",
+    "ended_at": "2026-05-26T09:02:28Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1215,
+    "total_tokens_out": 374,
+    "total_latency_ms": 43200,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1036,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Jordan Mills\", \"company\": \"Vertex Cloud\", \"title\": \"Director of Operations\", \"email\": \"j.mills@vertexcloud.io\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1215,
+        "tokens_out": 374,
+        "latency_ms": 42100,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Vertex Cloud, Contact: Jordan Mills <j.mills@vertexcloud.io>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Vertex Cloud\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Jordan Mills — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Vertex Cloud recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_b5c8d1",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-26T10:44:11Z",
+    "ended_at": "2026-05-26T10:45:00Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1235,
+    "total_tokens_out": 383,
+    "total_latency_ms": 42980,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1112,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"River Kim\", \"company\": \"Zenith Platform\", \"title\": \"Director of Operations\", \"email\": \"r.kim@zenithplatform.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1235,
+        "tokens_out": 383,
+        "latency_ms": 41880,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Zenith Platform, Contact: River Kim <r.kim@zenithplatform.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Zenith Platform\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: River Kim — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Zenith Platform recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_c6d9e2",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-27T09:01:22Z",
+    "ended_at": "2026-05-27T09:02:08Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1255,
+    "total_tokens_out": 390,
+    "total_latency_ms": 44321,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 955,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Blake Carter\", \"company\": \"Arc Systems\", \"title\": \"Director of Operations\", \"email\": \"b.carter@arcsystems.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1255,
+        "tokens_out": 390,
+        "latency_ms": 43221,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Arc Systems, Contact: Blake Carter <b.carter@arcsystems.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Arc Systems\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Blake Carter — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Arc Systems recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_d7e0f3",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-27T12:33:11Z",
+    "ended_at": "2026-05-27T12:34:01Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1225,
+    "total_tokens_out": 376,
+    "total_latency_ms": 43710,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 976,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Sage Turner\", \"company\": \"Opal Analytics\", \"title\": \"Director of Operations\", \"email\": \"s.turner@opalanalytics.io\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1225,
+        "tokens_out": 376,
+        "latency_ms": 42610,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Opal Analytics, Contact: Sage Turner <s.turner@opalanalytics.io>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Opal Analytics\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Sage Turner — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Opal Analytics recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_e8f1a4",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-28T09:11:44Z",
+    "ended_at": "2026-05-28T09:12:29Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1200,
+    "total_tokens_out": 368,
+    "total_latency_ms": 42550,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1056,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Robin Hassan\", \"company\": \"Granite Digital\", \"title\": \"Director of Operations\", \"email\": \"r.hassan@granitedigital.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1200,
+        "tokens_out": 368,
+        "latency_ms": 41450,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Granite Digital, Contact: Robin Hassan <r.hassan@granitedigital.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Granite Digital\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Robin Hassan — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Granite Digital recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_f9a2b5",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-28T14:22:01Z",
+    "ended_at": "2026-05-28T14:22:48Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1248,
+    "total_tokens_out": 384,
+    "total_latency_ms": 43890,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1242,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Cameron Wu\", \"company\": \"Nova Growth\", \"title\": \"Director of Operations\", \"email\": \"c.wu@novagrowth.io\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1248,
+        "tokens_out": 384,
+        "latency_ms": 42790,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Nova Growth, Contact: Cameron Wu <c.wu@novagrowth.io>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Nova Growth\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Cameron Wu — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Nova Growth recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_o1a2b3",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-22T10:01:44Z",
+    "ended_at": "2026-05-22T10:02:11Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1640,
+    "total_tokens_out": 388,
+    "total_latency_ms": 27210,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1640,
+        "tokens_out": 388,
+        "latency_ms": 26710,
+        "prompt_snapshot": "Draft a follow-up email to Harvest Digital following their Redwood Labs demo. Professional, concise. CTA: schedule next steps.",
+        "output_snapshot": "Subject: Next steps with Redwood Labs — Harvest Digital\n\nHi [Name],\n\nThank you for attending our platform walkthrough. Based on your questions about workflow automation and audit logging, I think there are two specific features worth exploring.\n\nWould you be available for a 30-minute technical deep dive this week?\n\nBest,\nRedwood Labs",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 500,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"status\": \"sent\", \"message_id\": \"msg_run_o1a2b3\", \"recipient\": \"harvest_digital@example.com\", \"timestamp\": \"2026-05-22T10:01:44Z\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_o2b3c4",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-22T14:44:18Z",
+    "ended_at": "2026-05-22T14:45:01Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1720,
+    "total_tokens_out": 401,
+    "total_latency_ms": 43210,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1720,
+        "tokens_out": 401,
+        "latency_ms": 42710,
+        "prompt_snapshot": "Draft a follow-up email to Ironwood Ventures following their Redwood Labs demo. Professional, concise. CTA: schedule next steps.",
+        "output_snapshot": "Subject: Next steps with Redwood Labs — Ironwood Ventures\n\nHi [Name],\n\nThank you for attending our platform walkthrough. Based on your questions about workflow automation and audit logging, I think there are two specific features worth exploring.\n\nWould you be available for a 30-minute technical deep dive this week?\n\nBest,\nRedwood Labs",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 500,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"status\": \"sent\", \"message_id\": \"msg_run_o2b3c4\", \"recipient\": \"ironwood_ventures@example.com\", \"timestamp\": \"2026-05-22T14:44:18Z\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_o3c4d5",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-23T10:02:44Z",
+    "ended_at": "2026-05-23T10:03:18Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1680,
+    "total_tokens_out": 392,
+    "total_latency_ms": 34002,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1680,
+        "tokens_out": 392,
+        "latency_ms": 33502,
+        "prompt_snapshot": "Draft a follow-up email to Summit Dynamics following their Redwood Labs demo. Professional, concise. CTA: schedule next steps.",
+        "output_snapshot": "Subject: Next steps with Redwood Labs — Summit Dynamics\n\nHi [Name],\n\nThank you for attending our platform walkthrough. Based on your questions about workflow automation and audit logging, I think there are two specific features worth exploring.\n\nWould you be available for a 30-minute technical deep dive this week?\n\nBest,\nRedwood Labs",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 500,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"status\": \"sent\", \"message_id\": \"msg_run_o3c4d5\", \"recipient\": \"summit_dynamics@example.com\", \"timestamp\": \"2026-05-23T10:02:44Z\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_o4d5e6",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-24T11:41:22Z",
+    "ended_at": "2026-05-24T11:42:08Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1700,
+    "total_tokens_out": 412,
+    "total_latency_ms": 46880,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1700,
+        "tokens_out": 412,
+        "latency_ms": 46380,
+        "prompt_snapshot": "Draft a follow-up email to Cascade Analytics following their Redwood Labs demo. Professional, concise. CTA: schedule next steps.",
+        "output_snapshot": "Subject: Next steps with Redwood Labs — Cascade Analytics\n\nHi [Name],\n\nThank you for attending our platform walkthrough. Based on your questions about workflow automation and audit logging, I think there are two specific features worth exploring.\n\nWould you be available for a 30-minute technical deep dive this week?\n\nBest,\nRedwood Labs",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 500,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"status\": \"sent\", \"message_id\": \"msg_run_o4d5e6\", \"recipient\": \"cascade_analytics@example.com\", \"timestamp\": \"2026-05-24T11:41:22Z\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_o5e6f7",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-25T09:58:01Z",
+    "ended_at": "2026-05-25T09:58:44Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1660,
+    "total_tokens_out": 396,
+    "total_latency_ms": 43210,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1660,
+        "tokens_out": 396,
+        "latency_ms": 42710,
+        "prompt_snapshot": "Draft a follow-up email to Momentum Growth Co following their Redwood Labs demo. Professional, concise. CTA: schedule next steps.",
+        "output_snapshot": "Subject: Next steps with Redwood Labs — Momentum Growth Co\n\nHi [Name],\n\nThank you for attending our platform walkthrough. Based on your questions about workflow automation and audit logging, I think there are two specific features worth exploring.\n\nWould you be available for a 30-minute technical deep dive this week?\n\nBest,\nRedwood Labs",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 500,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"status\": \"sent\", \"message_id\": \"msg_run_o5e6f7\", \"recipient\": \"momentum_growth_co@example.com\", \"timestamp\": \"2026-05-25T09:58:01Z\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_o6f7a8",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-26T13:12:02Z",
+    "ended_at": "2026-05-26T13:12:49Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1720,
+    "total_tokens_out": 408,
+    "total_latency_ms": 47112,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1720,
+        "tokens_out": 408,
+        "latency_ms": 46612,
+        "prompt_snapshot": "Draft a follow-up email to Vertex Cloud following their Redwood Labs demo. Professional, concise. CTA: schedule next steps.",
+        "output_snapshot": "Subject: Next steps with Redwood Labs — Vertex Cloud\n\nHi [Name],\n\nThank you for attending our platform walkthrough. Based on your questions about workflow automation and audit logging, I think there are two specific features worth exploring.\n\nWould you be available for a 30-minute technical deep dive this week?\n\nBest,\nRedwood Labs",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 500,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"status\": \"sent\", \"message_id\": \"msg_run_o6f7a8\", \"recipient\": \"vertex_cloud@example.com\", \"timestamp\": \"2026-05-26T13:12:02Z\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_o7a8b9",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-27T10:44:33Z",
+    "ended_at": "2026-05-27T10:45:19Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1690,
+    "total_tokens_out": 404,
+    "total_latency_ms": 46780,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1690,
+        "tokens_out": 404,
+        "latency_ms": 46280,
+        "prompt_snapshot": "Draft a follow-up email to Fulcrum Technology following their Redwood Labs demo. Professional, concise. CTA: schedule next steps.",
+        "output_snapshot": "Subject: Next steps with Redwood Labs — Fulcrum Technology\n\nHi [Name],\n\nThank you for attending our platform walkthrough. Based on your questions about workflow automation and audit logging, I think there are two specific features worth exploring.\n\nWould you be available for a 30-minute technical deep dive this week?\n\nBest,\nRedwood Labs",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 500,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"status\": \"sent\", \"message_id\": \"msg_run_o7a8b9\", \"recipient\": \"fulcrum_technology@example.com\", \"timestamp\": \"2026-05-27T10:44:33Z\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_o8b9c0",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-28T11:22:19Z",
+    "ended_at": "2026-05-28T11:23:01Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1710,
+    "total_tokens_out": 399,
+    "total_latency_ms": 42991,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1710,
+        "tokens_out": 399,
+        "latency_ms": 42491,
+        "prompt_snapshot": "Draft a follow-up email to Zenith Platform following their Redwood Labs demo. Professional, concise. CTA: schedule next steps.",
+        "output_snapshot": "Subject: Next steps with Redwood Labs — Zenith Platform\n\nHi [Name],\n\nThank you for attending our platform walkthrough. Based on your questions about workflow automation and audit logging, I think there are two specific features worth exploring.\n\nWould you be available for a 30-minute technical deep dive this week?\n\nBest,\nRedwood Labs",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 500,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"status\": \"sent\", \"message_id\": \"msg_run_o8b9c0\", \"recipient\": \"zenith_platform@example.com\", \"timestamp\": \"2026-05-28T11:22:19Z\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_cs1a2b",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-22T10:44:02Z",
+    "ended_at": "2026-05-22T10:45:12Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 8841,
+    "total_tokens_out": 1720,
+    "total_latency_ms": 70112,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 310,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 4,600 words / MSA-2026-BELMONT-0064]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 68,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v3.md (410 tokens) + 2 prior contracts (1,400 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 8841,
+        "tokens_out": 1720,
+        "latency_ms": 62212,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v3 — 410 tokens]\n[CONTRACT — 4,600 words / MSA-2026-BELMONT-0064]\n[PRIOR CONTRACT CONTEXT — 1,400 tokens]\n\nReview the contract.",
+        "output_snapshot": "CONTRACT REVIEW: MSA-2026-BELMONT-0064\n\nFINDINGS:\n✓ Liability cap: 2× ACV (§8.1)\n✓ Auto-renewal: 90 days (§11.2)\n✓ DPA Exhibit B attached\n\nSUMMARY: Clean. Approved.",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      },
+      {
+        "id": "step_4",
+        "parent_id": null,
+        "name": "extract_clauses",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1720,
+        "tokens_out": 620,
+        "latency_ms": 6412,
+        "prompt_snapshot": "Extract structured clause data.",
+        "output_snapshot": "{\"liability_cap\": \"2x_acv\", \"auto_renewal_days\": 90, \"dpa_compliant\": true, \"flags\": []}",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0,
+          "max_tokens": 1024
+        }
+      },
+      {
+        "id": "step_5",
+        "parent_id": null,
+        "name": "flag_risks",
+        "tool": "risk_classifier",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 110,
+        "prompt_snapshot": null,
+        "output_snapshot": "[RISK_LEVEL: LOW — 0 flags]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_cs2b3c",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-23T14:08:44Z",
+    "ended_at": "2026-05-23T14:09:55Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 9102,
+    "total_tokens_out": 1840,
+    "total_latency_ms": 71002,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 301,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 4,800 words / SLA-2026-NORTHWIND-0074]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 72,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v3.md (410 tokens) + 2 prior contracts (1,600 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 9102,
+        "tokens_out": 1840,
+        "latency_ms": 62928,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v3 — 410 tokens]\n[CONTRACT — 4,800 words / SLA-2026-NORTHWIND-0074]\n[PRIOR CONTRACT CONTEXT — 1,600 tokens]\n\nReview the contract.",
+        "output_snapshot": "CONTRACT REVIEW: SLA-2026-NORTHWIND-0074\n\nFINDINGS:\n✓ SLA uptime commitment: 99.9% (§3.1)\n✓ Remedies: service credits per downtime table (§3.4)\n✓ DPA Exhibit A attached\n⚠ Liability cap: 1× ACV — below standard 2× ACV\n\nSUMMARY: SLA terms acceptable; liability cap below policy — flag for negotiation.",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      },
+      {
+        "id": "step_4",
+        "parent_id": null,
+        "name": "extract_clauses",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1840,
+        "tokens_out": 640,
+        "latency_ms": 6901,
+        "prompt_snapshot": "Extract structured clause data.",
+        "output_snapshot": "{\"liability_cap\": \"1x_acv\", \"dpa_compliant\": true, \"sla_uptime\": \"99.9%\", \"flags\": [\"liability_cap_below_standard\"]}",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0,
+          "max_tokens": 1024
+        }
+      },
+      {
+        "id": "step_5",
+        "parent_id": null,
+        "name": "flag_risks",
+        "tool": "risk_classifier",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 800,
+        "prompt_snapshot": null,
+        "output_snapshot": "[RISK_LEVEL: MEDIUM — 1 flag: liability_cap_below_standard]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_7c4e9b",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-26T14:22:10Z",
+    "ended_at": "2026-05-26T14:23:08Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 9824,
+    "total_tokens_out": 1842,
+    "total_latency_ms": 58412,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 289,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 4,100 words / MSA-2026-NORTHWIND-0071 — Northwind Systems SaaS subscription agreement]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 64,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v3.md (410 tokens) + 2 prior contracts (1,200 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 9824,
+        "tokens_out": 1842,
+        "latency_ms": 54210,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v3 — 410 tokens]\n# Compliance Policy v3\n## Data Handling\nAll contracts must include GDPR-compliant data handling clauses (Art. 13-14).\nVerify DPA is attached or referenced in Exhibit A.\nMaximum liability cap: 2× annual contract value.\nAuto-renewal notice window: minimum 60 days.\n\n[CONTRACT — 4,100 words / MSA-2026-NORTHWIND-0071]\nMASTER SUBSCRIPTION AGREEMENT\nThis Master Subscription Agreement (\"Agreement\") is entered into as of May 20, 2026, by and between Redwood Labs, Inc. (\"Company\") and Northwind Systems, Inc. (\"Customer\").\n1. SERVICES. Company agrees to provide Customer with access to the Redwood Labs platform...\n[... 4,100 words ...]\n\n[PRIOR CONTRACT CONTEXT — 1,200 tokens]\nPrior agreement MSA-2026-BELMONT-0064 (Belmont Capital): liability cap 2× ACV, auto-renewal 90 days, DPA Exhibit B.\n\nReview the contract for: (1) liability caps, (2) auto-renewal clauses, (3) DPA compliance, (4) termination terms. Flag any deviations from policy.",
+        "output_snapshot": "CONTRACT REVIEW: MSA-2026-NORTHWIND-0071\n\nFINDINGS:\n✓ Liability cap: 2× ACV (§8.2) — compliant\n✓ Auto-renewal: 90-day notice window (§12.1) — compliant (exceeds 60-day minimum)\n✓ DPA: Referenced in Exhibit A, attached — compliant\n⚠ Termination for convenience: 30-day notice (§11.3) — below standard 60-day; flag for legal review\n\nSUMMARY: Contract passes compliance review with one advisory flag on termination notice period.",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      },
+      {
+        "id": "step_4",
+        "parent_id": null,
+        "name": "extract_clauses",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1842,
+        "tokens_out": 612,
+        "latency_ms": 3241,
+        "prompt_snapshot": "Extract structured clause data from the review output. Format as JSON with keys: liability_cap, auto_renewal_days, dpa_compliant, termination_notice_days, flags.",
+        "output_snapshot": "{\"liability_cap\": \"2x_acv\", \"auto_renewal_days\": 90, \"dpa_compliant\": true, \"termination_notice_days\": 30, \"flags\": [\"termination_notice_below_standard\"]}",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0,
+          "max_tokens": 1024
+        }
+      },
+      {
+        "id": "step_5",
+        "parent_id": null,
+        "name": "flag_risks",
+        "tool": "risk_classifier",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 608,
+        "prompt_snapshot": null,
+        "output_snapshot": "[RISK_LEVEL: LOW — 1 advisory flag, 0 blocking issues]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_4f8e2a",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-27T10:12:08Z",
+    "ended_at": "2026-05-27T10:13:01Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 7841,
+    "total_tokens_out": 1622,
+    "total_latency_ms": 53210,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 274,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 2,800 words / NDA-2026-STRIPE-0082 — short NDA]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 71,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v4.md (4,400 tokens) + 1 prior contract (827 tokens)] — NOTE: v4 injected but short contract keeps total under limit",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 7841,
+        "tokens_out": 1622,
+        "latency_ms": 50101,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v4 — 4,400 tokens]\n[CONTRACT — 2,800 words / NDA-2026-STRIPE-0082]\n[PRIOR CONTRACT CONTEXT — 827 tokens]\n\nReview the contract.",
+        "output_snapshot": "CONTRACT REVIEW: NDA-2026-STRIPE-0082\n\nFINDINGS:\n✓ Mutual NDA — standard terms\n✓ 2-year term, 1-year post-termination\n✓ No liability provisions (NDA scope)\n\nSUMMARY: Standard NDA. No issues.",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      },
+      {
+        "id": "step_4",
+        "parent_id": null,
+        "name": "extract_clauses",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1622,
+        "tokens_out": 288,
+        "latency_ms": 2764,
+        "prompt_snapshot": "Extract structured clause data from the review output.",
+        "output_snapshot": "{\"contract_type\": \"nda\", \"term_years\": 2, \"mutual\": true, \"flags\": []}",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_5",
+        "parent_id": null,
+        "name": "flag_risks",
+        "tool": "risk_classifier",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 0,
+        "prompt_snapshot": null,
+        "output_snapshot": "[RISK_LEVEL: LOW — 0 flags]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_8f2a1c",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-28T03:14:22Z",
+    "ended_at": "2026-05-28T03:14:51Z",
+    "status": "failed",
+    "failure_mode": "context_overflow",
+    "total_tokens_in": 14214,
+    "total_tokens_out": 0,
+    "total_latency_ms": 29341,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 312,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 6,200 words / MSA-2026-ACME-0088 — Acme Ventures LLC enterprise platform agreement]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 88,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v4.md (4,400 tokens) + 3 prior contracts (1,614 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "failed",
+        "tokens_in": 14214,
+        "tokens_out": 0,
+        "latency_ms": 28941,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v4 — 4,400 tokens]\n# Compliance Policy v4 — COMPREHENSIVE EDITION\n## Data Handling (GDPR, CCPA, HIPAA Cross-Reference)\nAll contracts must include GDPR-compliant data handling clauses (Art. 13-14).\nVerify DPA is attached or referenced in Exhibit A.\nMaximum liability cap: 2× annual contract value.\nAuto-renewal notice window: minimum 60 days.\n\n### CCPA Addendum (Added 2026-05-27)\nCalifornia Consumer Privacy Act compliance required for all customers with California operations.\nMust include: right to deletion clauses, data portability provisions, opt-out mechanisms.\nReference: CCPA § 1798.100-1798.199 (full statutory text appended below)\n[... 1,800 tokens of statutory CCPA text ...]\n\n### HIPAA Safe Harbor Provisions (Added 2026-05-27)\nFor healthcare-adjacent customers, BAA must be executed prior to data processing.\nPHI handling: minimum necessary standard, access logging, breach notification <60 days.\n[... 900 tokens of HIPAA provisions ...]\n\n### SOC 2 Type II Attestation Requirements\nAnnual audit required. Report must be less than 12 months old at time of contract execution.\n[... 600 tokens of SOC 2 requirements ...]\n\n### PCI-DSS Scope Determination\nIf payment card data transits through Customer systems...\n[... 500 tokens of PCI requirements ...]\n\n[CONTRACT — 8,200 tokens / MSA-2026-ACME-0088]\nENTERPRISE MASTER SUBSCRIPTION AGREEMENT\nThis Enterprise Master Subscription Agreement (\"Agreement\") is entered into as of May 27, 2026, by and between Redwood Labs, Inc. (\"Company\") and Acme Ventures LLC (\"Customer\").\n[... 8,200 tokens of contract text ...]\n\n[PRIOR CONTRACT CONTEXT — 1,614 tokens]\nPrior agreements: MSA-2026-BELMONT-0064, MSA-2026-NORTHWIND-0071, NDA-2026-ACME-0081.\n\nReview the contract for: (1) liability caps, (2) auto-renewal clauses, (3) DPA compliance, (4) termination terms. Flag any deviations from policy.",
+        "output_snapshot": null,
+        "error": "context_length_exceeded: prompt is 14,214 tokens; model max_tokens is 8,192",
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_2d9e4f",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-28T07:41:03Z",
+    "ended_at": "2026-05-28T07:41:31Z",
+    "status": "failed",
+    "failure_mode": "context_overflow",
+    "total_tokens_in": 13688,
+    "total_tokens_out": 0,
+    "total_latency_ms": 27891,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 340,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 5,800 words / MSA-2026-BELMONT-0089]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 96,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v4.md (4,400 tokens) + 3 prior contracts (1,614 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "failed",
+        "tokens_in": 13688,
+        "tokens_out": 0,
+        "latency_ms": 27491,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v4 — 4,400 tokens]\n[CONTRACT — 5,800 words / MSA-2026-BELMONT-0089]\n[PRIOR CONTRACT CONTEXT — 1,614 tokens]\n\nReview the contract for: (1) liability caps, (2) auto-renewal clauses, (3) DPA compliance, (4) termination terms.",
+        "output_snapshot": null,
+        "error": "context_length_exceeded: prompt is 13,688 tokens; model max_tokens is 8,192",
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_a1b5c2",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-28T11:22:44Z",
+    "ended_at": "2026-05-28T11:23:09Z",
+    "status": "failed",
+    "failure_mode": "context_overflow",
+    "total_tokens_in": 12940,
+    "total_tokens_out": 0,
+    "total_latency_ms": 26102,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 303,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 5,200 words / NDA-2026-STRIPE-0092]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 86,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v4.md (4,400 tokens) + 3 prior contracts (1,614 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "failed",
+        "tokens_in": 12940,
+        "tokens_out": 0,
+        "latency_ms": 25702,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v4 — 4,400 tokens]\n[CONTRACT — 5,200 words / NDA-2026-STRIPE-0092]\n[PRIOR CONTRACT CONTEXT — 1,614 tokens]\n\nReview the contract for: (1) liability caps, (2) auto-renewal clauses, (3) DPA compliance, (4) termination terms.",
+        "output_snapshot": null,
+        "error": "context_length_exceeded: prompt is 12,940 tokens; model max_tokens is 8,192",
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_e7f3d8",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-28T16:09:17Z",
+    "ended_at": "2026-05-28T16:09:44Z",
+    "status": "failed",
+    "failure_mode": "context_overflow",
+    "total_tokens_in": 14580,
+    "total_tokens_out": 0,
+    "total_latency_ms": 28441,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 312,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 6,400 words / MSA-2026-ACME-0093]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 96,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v4.md (4,400 tokens) + 3 prior contracts (1,614 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "failed",
+        "tokens_in": 14580,
+        "tokens_out": 0,
+        "latency_ms": 28041,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v4 — 4,400 tokens]\n[CONTRACT — 6,400 words / MSA-2026-ACME-0093]\n[PRIOR CONTRACT CONTEXT — 1,614 tokens]\n\nReview the contract for: (1) liability caps, (2) auto-renewal clauses, (3) DPA compliance, (4) termination terms.",
+        "output_snapshot": null,
+        "error": "context_length_exceeded: prompt is 14,580 tokens; model max_tokens is 8,192",
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_c4a8b1",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-29T02:33:55Z",
+    "ended_at": "2026-05-29T02:34:21Z",
+    "status": "failed",
+    "failure_mode": "context_overflow",
+    "total_tokens_in": 13204,
+    "total_tokens_out": 0,
+    "total_latency_ms": 25890,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 328,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 5,600 words / SLA-2026-NORTHWIND-0095]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 97,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v4.md (4,400 tokens) + 3 prior contracts (1,614 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "failed",
+        "tokens_in": 13204,
+        "tokens_out": 0,
+        "latency_ms": 25490,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v4 — 4,400 tokens]\n[CONTRACT — 5,600 words / SLA-2026-NORTHWIND-0095]\n[PRIOR CONTRACT CONTEXT — 1,614 tokens]\n\nReview the contract for: (1) liability caps, (2) auto-renewal clauses, (3) DPA compliance, (4) termination terms.",
+        "output_snapshot": null,
+        "error": "context_length_exceeded: prompt is 13,204 tokens; model max_tokens is 8,192",
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_9d2e6a",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-29T09:18:33Z",
+    "ended_at": "2026-05-29T09:19:01Z",
+    "status": "failed",
+    "failure_mode": "context_overflow",
+    "total_tokens_in": 13942,
+    "total_tokens_out": 0,
+    "total_latency_ms": 27441,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 326,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 6,000 words / MSA-2026-BELMONT-0097]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 89,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v4.md (4,400 tokens) + 3 prior contracts (1,614 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "failed",
+        "tokens_in": 13942,
+        "tokens_out": 0,
+        "latency_ms": 27041,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v4 — 4,400 tokens]\n[CONTRACT — 6,000 words / MSA-2026-BELMONT-0097]\n[PRIOR CONTRACT CONTEXT — 1,614 tokens]\n\nReview the contract for: (1) liability caps, (2) auto-renewal clauses, (3) DPA compliance, (4) termination terms.",
+        "output_snapshot": null,
+        "error": "context_length_exceeded: prompt is 13,942 tokens; model max_tokens is 8,192",
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_b3c7e1",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-27T09:14:22Z",
+    "ended_at": "2026-05-27T09:15:52Z",
+    "status": "failed",
+    "failure_mode": "tool_timeout",
+    "total_tokens_in": 1840,
+    "total_tokens_out": 412,
+    "total_latency_ms": 90011,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1840,
+        "tokens_out": 412,
+        "latency_ms": 4220,
+        "prompt_snapshot": "Draft a follow-up email to Acme Ventures LLC following their demo on 2026-05-27. Tone: professional, concise. CTA: schedule next steps call.",
+        "output_snapshot": "Subject: Following up on your Redwood Labs demo\n\nHi [Name],\n\nThank you for attending our platform demo yesterday. I wanted to follow up and see if you had any questions about what we covered.\n\nWould you be available for a 30-minute call this week to discuss next steps?\n\nBest,\nRedwood Labs Team",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 85791,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "tool_timeout: smtp_client exceeded 30000ms timeout (actual: 85,791ms); SMTP relay at smtp.redwoodlabs.internal not responding",
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_f8a2d4",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-27T14:38:09Z",
+    "ended_at": "2026-05-27T14:39:41Z",
+    "status": "failed",
+    "failure_mode": "tool_timeout",
+    "total_tokens_in": 1840,
+    "total_tokens_out": 412,
+    "total_latency_ms": 90011,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1840,
+        "tokens_out": 412,
+        "latency_ms": 4220,
+        "prompt_snapshot": "Draft a follow-up email to Northwind Systems following their demo on 2026-05-27. Tone: professional, concise. CTA: schedule next steps call.",
+        "output_snapshot": "Subject: Following up on your Redwood Labs demo\n\nHi [Name],\n\nThank you for attending our platform demo yesterday. I wanted to follow up and see if you had any questions about what we covered.\n\nWould you be available for a 30-minute call this week to discuss next steps?\n\nBest,\nRedwood Labs Team",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 85791,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "tool_timeout: smtp_client exceeded 30000ms timeout (actual: 85,791ms); SMTP relay at smtp.redwoodlabs.internal not responding",
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_5e9b3c",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-28T10:22:18Z",
+    "ended_at": "2026-05-28T10:23:48Z",
+    "status": "failed",
+    "failure_mode": "tool_timeout",
+    "total_tokens_in": 1840,
+    "total_tokens_out": 412,
+    "total_latency_ms": 90011,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1840,
+        "tokens_out": 412,
+        "latency_ms": 4220,
+        "prompt_snapshot": "Draft a follow-up email to Belmont Capital following their demo on 2026-05-28. Tone: professional, concise. CTA: schedule next steps call.",
+        "output_snapshot": "Subject: Following up on your Redwood Labs demo\n\nHi [Name],\n\nThank you for attending our platform demo yesterday. I wanted to follow up and see if you had any questions about what we covered.\n\nWould you be available for a 30-minute call this week to discuss next steps?\n\nBest,\nRedwood Labs Team",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 85791,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "tool_timeout: smtp_client exceeded 30000ms timeout (actual: 85,791ms); SMTP relay at smtp.redwoodlabs.internal not responding",
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_d1f4a8",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-23T15:44:01Z",
+    "ended_at": "2026-05-23T15:44:18Z",
+    "status": "failed",
+    "failure_mode": "guardrail_reject",
+    "total_tokens_in": 1920,
+    "total_tokens_out": 380,
+    "total_latency_ms": 17211,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1920,
+        "tokens_out": 380,
+        "latency_ms": 3892,
+        "prompt_snapshot": "Draft a follow-up email to Belmont Capital. Be persuasive and emphasize Redwood Labs guarantees industry-leading 99.99% uptime.",
+        "output_snapshot": "Subject: Redwood Labs — Guaranteed 99.99% Uptime for Belmont Capital\n\nDear [Name],\n\nRedwood Labs guarantees 99.99% uptime backed by our SLA and $500k penalty clause...",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "compliance_check",
+        "tool": "guardrail_classifier",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 13319,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "guardrail_reject: outbound_claims_policy — draft contains unverified performance guarantee ('99.99% uptime'); requires legal review before send",
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_3a7c9e",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-25T11:08:44Z",
+    "ended_at": "2026-05-25T11:08:59Z",
+    "status": "failed",
+    "failure_mode": "guardrail_reject",
+    "total_tokens_in": 1780,
+    "total_tokens_out": 344,
+    "total_latency_ms": 15201,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1780,
+        "tokens_out": 344,
+        "latency_ms": 3601,
+        "prompt_snapshot": "Draft a competitive displacement email for Northwind Systems currently using a competitor product. Highlight competitor weaknesses.",
+        "output_snapshot": "Subject: Why 73% of [Competitor] customers switch to Redwood Labs\n\nHi [Name],\n\nOur data shows [Competitor]'s infrastructure costs run 40% higher than Redwood Labs on comparable workloads...",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "compliance_check",
+        "tool": "guardrail_classifier",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 11600,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "guardrail_reject: competitive_claims_policy — draft references unverified competitive statistics; requires legal/marketing approval",
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_7b2f5d",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-24T09:31:22Z",
+    "ended_at": "2026-05-24T09:31:49Z",
+    "status": "failed",
+    "failure_mode": "hallucination_detected",
+    "total_tokens_in": 2100,
+    "total_tokens_out": 489,
+    "total_latency_ms": 27441,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "enrich_contact",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1204,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Jordan Kim\", \"company\": \"Acme Ventures LLC\", \"title\": null, \"email\": \"j.kim@acmeventures.com\", \"linkedin\": null}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 2100,
+        "tokens_out": 489,
+        "latency_ms": 22418,
+        "prompt_snapshot": "Draft a personalized follow-up email to Jordan Kim at Acme Ventures LLC. Use their title and recent activity to personalize. Enrichment data: title=null.",
+        "output_snapshot": "Subject: Following up — Jordan\n\nHi Jordan,\n\nAs VP of Engineering at Acme Ventures, I imagine you're focused on scaling your infrastructure this quarter...",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "hallucination_check",
+        "tool": "fact_verifier",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 3819,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "hallucination_detected: email references 'VP of Engineering' title for Jordan Kim — enrichment data shows title=null; fabricated from context",
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_dg1a2b",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-24T15:11:02Z",
+    "ended_at": "2026-05-24T15:11:52Z",
+    "status": "degraded",
+    "failure_mode": "missing_input",
+    "total_tokens_in": 980,
+    "total_tokens_out": 311,
+    "total_latency_ms": 50112,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 2100,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "missing_input: email field is null; clearbit_lookup requires valid email",
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 980,
+        "tokens_out": 311,
+        "latency_ms": 48012,
+        "prompt_snapshot": "Summarize this lead with partial data. Company: Apex Fintech (unknown contact). No clearbit data available — summarize from company name only.",
+        "output_snapshot": "LEAD SUMMARY (PARTIAL): Apex Fintech\n\nICP Score: 6/10 (estimate, no contact data)\nNote: Clearbit lookup failed — manual research required before outreach\nNext action: Manual contact lookup via LinkedIn",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_dg2b3c",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-25T16:44:01Z",
+    "ended_at": "2026-05-25T16:45:01Z",
+    "status": "degraded",
+    "failure_mode": "tool_timeout",
+    "total_tokens_in": 1820,
+    "total_tokens_out": 412,
+    "total_latency_ms": 60101,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1820,
+        "tokens_out": 412,
+        "latency_ms": 4201,
+        "prompt_snapshot": "Draft follow-up for Ironwood Ventures.",
+        "output_snapshot": "Subject: Following up — Ironwood Ventures\n\nHi [Name], thanks for the demo. Let's schedule next steps.",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 30000,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "tool_timeout: smtp_client timed out at 30000ms; email queued for retry",
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "queue_retry",
+        "tool": "retry_queue",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 25900,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"queued\": true, \"retry_at\": \"2026-05-25T17:15:00Z\", \"attempt\": 1}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_dg3c4d",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-26T16:22:44Z",
+    "ended_at": "2026-05-26T16:24:02Z",
+    "status": "degraded",
+    "failure_mode": null,
+    "total_tokens_in": 9200,
+    "total_tokens_out": 1600,
+    "total_latency_ms": 78102,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 298,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 4,900 words / MSA-2026-ACME-0081]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "inject_context",
+        "tool": "context_builder",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 65,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v3.md (410 tokens) + 2 prior contracts (1,600 tokens)]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "review_contract",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 9200,
+        "tokens_out": 1600,
+        "latency_ms": 62812,
+        "prompt_snapshot": "Review MSA-2026-ACME-0081 for Redwood Labs compliance.",
+        "output_snapshot": "CONTRACT REVIEW: MSA-2026-ACME-0081\n✓ DPA attached\n⚠ Liability cap: uncapped — requires negotiation\n⚠ Auto-renewal: 30 days — below 60-day minimum\n\nSUMMARY: Two flags require negotiation before execution.",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.2,
+          "max_tokens": 8192
+        }
+      },
+      {
+        "id": "step_4",
+        "parent_id": null,
+        "name": "extract_clauses",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1600,
+        "tokens_out": 620,
+        "latency_ms": 6808,
+        "prompt_snapshot": "Extract clause data.",
+        "output_snapshot": "{\"liability_cap\": \"uncapped\", \"auto_renewal_days\": 30, \"dpa_compliant\": true, \"flags\": [\"liability_uncapped\", \"auto_renewal_below_minimum\"]}",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0,
+          "max_tokens": 1024
+        }
+      },
+      {
+        "id": "step_5",
+        "parent_id": null,
+        "name": "flag_risks",
+        "tool": "risk_classifier",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 8119,
+        "prompt_snapshot": null,
+        "output_snapshot": "[RISK_LEVEL: HIGH — 2 flags: liability_uncapped, auto_renewal_below_minimum]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_dg4d5e",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-27T15:33:22Z",
+    "ended_at": "2026-05-27T15:34:08Z",
+    "status": "degraded",
+    "failure_mode": "missing_input",
+    "total_tokens_in": 1100,
+    "total_tokens_out": 290,
+    "total_latency_ms": 46112,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1800,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "missing_input: domain blacklisted in clearbit (personal email domain)",
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1100,
+        "tokens_out": 290,
+        "latency_ms": 44312,
+        "prompt_snapshot": "Summarize lead: Chris Wolfe at unknown company. No enrichment data.",
+        "output_snapshot": "LEAD SUMMARY (PARTIAL): Unknown company (personal email)\n\nICP Score: 3/10 — insufficient data\nNext action: Manual qualification required",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_dg5e6f",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-28T14:01:44Z",
+    "ended_at": "2026-05-28T14:02:48Z",
+    "status": "degraded",
+    "failure_mode": null,
+    "total_tokens_in": 2200,
+    "total_tokens_out": 460,
+    "total_latency_ms": 67101,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 2200,
+        "tokens_out": 460,
+        "latency_ms": 49812,
+        "prompt_snapshot": "Draft follow-up for Arc Systems. Reference their CRM tool interest.",
+        "output_snapshot": "Subject: Arc Systems — CRM automation deep dive\n\nHi Blake,\n\nBased on your questions about CRM integration during the demo, I wanted to share how Redwood Labs connects with Salesforce and HubSpot in under 20 minutes.",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "compliance_check",
+        "tool": "guardrail_classifier",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 8201,
+        "prompt_snapshot": null,
+        "output_snapshot": "[GUARDRAIL: PASS — no policy violations detected]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_3",
+        "parent_id": null,
+        "name": "smtp_send",
+        "tool": "smtp_client",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 9088,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "tool_timeout: smtp_client timeout 9,088ms on secondary relay — email partially delivered, bounce risk",
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_dg6f7a",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-29T10:08:11Z",
+    "ended_at": "2026-05-29T10:09:01Z",
+    "status": "degraded",
+    "failure_mode": null,
+    "total_tokens_in": 1440,
+    "total_tokens_out": 320,
+    "total_latency_ms": 50211,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1280,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Finn O'Brien\", \"company\": \"Harbor Logic\", \"title\": \"CTO\", \"email\": \"f.obrien@harborlogic.com\", \"employees\": 80, \"industry\": \"DevTools\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1440,
+        "tokens_out": 320,
+        "latency_ms": 48931,
+        "prompt_snapshot": "Summarize lead: Finn O'Brien, Harbor Logic CTO.",
+        "output_snapshot": "LEAD SUMMARY: Harbor Logic\n\nICP Score: 7/10 — small-to-mid DevTools company, CTO is direct decision maker\nNote: 80 employees — may be below current ICP minimum (100+)\nNext action: Route to SMB track, CTO personalization angle",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_dg7a8b",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-29T14:44:22Z",
+    "ended_at": "2026-05-29T14:45:58Z",
+    "status": "degraded",
+    "failure_mode": "missing_input",
+    "total_tokens_in": 6800,
+    "total_tokens_out": 0,
+    "total_latency_ms": 94112,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "load_contract",
+        "tool": "file_reader",
+        "status": "failed",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 94112,
+        "prompt_snapshot": null,
+        "output_snapshot": null,
+        "error": "missing_input: contract file MSA-2026-BELMONT-0102 not found in document store; upload may have failed",
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_dg8b9c",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-22T16:01:44Z",
+    "ended_at": "2026-05-22T16:02:39Z",
+    "status": "degraded",
+    "failure_mode": null,
+    "total_tokens_in": 1980,
+    "total_tokens_out": 440,
+    "total_latency_ms": 55441,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "draft_email",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1980,
+        "tokens_out": 440,
+        "latency_ms": 51202,
+        "prompt_snapshot": "Draft follow-up for Cascade Analytics. Reference pricing discussion.",
+        "output_snapshot": "Subject: Cascade Analytics — pricing follow-up\n\nHi Taylor,\n\nFollowing up on the pricing discussion. Happy to walk through the enterprise tier and volume discounts in more detail.",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.7,
+          "max_tokens": 512
+        }
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "compliance_check",
+        "tool": "guardrail_classifier",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 4239,
+        "prompt_snapshot": null,
+        "output_snapshot": "[GUARDRAIL: PASS]",
+        "error": null,
+        "model": null,
+        "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_z1a2b3",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-29T09:11:02Z",
+    "ended_at": "2026-05-29T09:11:47Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1255,
+    "total_tokens_out": 388,
+    "total_latency_ms": 43801,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 1063,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Skylar Bowen\", \"company\": \"Trellis Ventures\", \"title\": \"Director of Operations\", \"email\": \"s.bowen@trellisventures.io\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1255,
+        "tokens_out": 388,
+        "latency_ms": 42701,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Trellis Ventures, Contact: Skylar Bowen <s.bowen@trellisventures.io>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Trellis Ventures\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Skylar Bowen — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Trellis Ventures recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  },
+  {
+    "id": "run_z2b3c4",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-29T11:44:18Z",
+    "ended_at": "2026-05-29T11:45:04Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1272,
+    "total_tokens_out": 393,
+    "total_latency_ms": 44102,
+    "steps": [
+      {
+        "id": "step_1",
+        "parent_id": null,
+        "name": "clearbit_lookup",
+        "tool": "clearbit_lookup",
+        "status": "success",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "latency_ms": 997,
+        "prompt_snapshot": null,
+        "output_snapshot": "{\"name\": \"Rowan Davies\", \"company\": \"Cobalt Systems\", \"title\": \"Director of Operations\", \"email\": \"r.davies@cobaltsystems.com\", \"employees\": 250, \"industry\": \"B2B SaaS\"}",
+        "error": null,
+        "model": null,
+        "model_params": null
+      },
+      {
+        "id": "step_2",
+        "parent_id": null,
+        "name": "summarize_lead",
+        "tool": null,
+        "status": "success",
+        "tokens_in": 1272,
+        "tokens_out": 393,
+        "latency_ms": 43002,
+        "prompt_snapshot": "Summarize this lead for the Redwood Labs sales team. Company: Cobalt Systems, Contact: Rowan Davies <r.davies@cobaltsystems.com>. Clearbit data: [see step_1]. Provide: ICP score (1-10), next action, personalization hook.",
+        "output_snapshot": "LEAD SUMMARY: Cobalt Systems\n\nICP Score: 8/10 — mid-market B2B SaaS, fits Redwood Labs core segment\nContact: Rowan Davies — Director of Operations (high authority on tooling decisions)\nPersonalization hook: Cobalt Systems recently raised Series B; automation ROI framing likely effective\nNext action: Sequence to ops-automation track",
+        "error": null,
+        "model": "claude-sonnet-4-6",
+        "model_params": {
+          "temperature": 0.3,
+          "max_tokens": 512
+        }
+      }
+    ]
+  }
+]

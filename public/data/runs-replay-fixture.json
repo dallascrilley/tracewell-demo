@@ -1,0 +1,52 @@
+{
+  "contract-review-agent": {
+    "review_contract_v4_broken": {
+      "description": "Replay response when v4 policy is present — fails with context_overflow",
+      "tokens_in": 14214,
+      "tokens_out": 0,
+      "latency_ms": 28941,
+      "output": null,
+      "error": "context_length_exceeded: prompt is 14,214 tokens; model max_tokens is 8,192"
+    },
+    "review_contract_v3_fixed": {
+      "description": "Replay response after stripping v4 injection — succeeds",
+      "tokens_in": 9824,
+      "tokens_out": 1842,
+      "latency_ms": 54210,
+      "output": "CONTRACT REVIEW: MSA-2026-ACME-0088 (REPLAY — v3 policy)\n\nFINDINGS:\n✓ Liability cap: 2× ACV (§8.2) — compliant\n✓ Auto-renewal: 90-day notice window (§12.1) — compliant\n✓ DPA: Referenced in Exhibit A — compliant\n✓ Data residency: US-only clause (§5.3) — compliant\n⚠ IP indemnification: broader than standard (§9.1) — flag for legal\n\nSUMMARY: Contract passes compliance review with one advisory flag on IP indemnification scope. Recommend legal review of §9.1 before execution.",
+      "error": null
+    },
+    "inject_context_v3": {
+      "description": "inject_context output when v3 policy is loaded (410 tokens)",
+      "output": "[INJECTED: compliance_policy_v3.md (410 tokens) + 3 prior contracts (1,614 tokens)]",
+      "tokens_injected": 410,
+      "error": null
+    },
+    "inject_context_v4": {
+      "description": "inject_context output when v4 policy is loaded (4,400 tokens)",
+      "output": "[INJECTED: compliance_policy_v4.md (4,400 tokens) + 3 prior contracts (1,614 tokens)]",
+      "tokens_injected": 4400,
+      "error": null
+    }
+  },
+  "lead-enrichment-agent": {
+    "summarize_lead": {
+      "description": "Generic lead summary replay fixture",
+      "tokens_in": 1240,
+      "tokens_out": 384,
+      "latency_ms": 41200,
+      "output": "LEAD SUMMARY (REPLAY)\n\nICP Score: 8/10 — mid-market B2B SaaS, strong fit\nPersonalization hook: Recent product launch signals active growth phase\nNext action: Route to enterprise track; CTO or VP Eng outreach recommended",
+      "error": null
+    }
+  },
+  "outreach-sequencer": {
+    "draft_email": {
+      "description": "Generic email draft replay fixture",
+      "tokens_in": 1720,
+      "tokens_out": 404,
+      "latency_ms": 43800,
+      "output": "Subject: Following up on your Redwood Labs demo (REPLAY)\n\nHi [Name],\n\nThank you for attending our platform walkthrough. I wanted to follow up on your questions about workflow observability and audit trails.\n\nWe have a 30-minute technical session that covers exactly those use cases — would you be available this week?\n\nBest,\nRedwood Labs Team",
+      "error": null
+    }
+  }
+}

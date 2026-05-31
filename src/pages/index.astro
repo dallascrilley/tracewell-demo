@@ -1,0 +1,113 @@
+---
+// Tracewell — flight recorder for AI agents
+// Static page; all data loaded client-side from /data/runs.json
+import '../styles/tracewell.css';
+const title = "Tracewell — Your agent failed in production. Here's the black box.";
+const description = "The flight recorder for AI agents. Every tool call, every token, every prompt — and the one diff that broke it.";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+    <div class="tw-root tw-shell" id="tw-app">
+      <nav class="tw-nav" aria-label="Tracewell navigation">
+        <span class="tw-nav-logo">tracewell</span>
+        <span class="tw-nav-sep" aria-hidden="true"></span>
+        <span class="tw-nav-label">Agent Run Explorer</span>
+        <span class="tw-nav-spacer"></span>
+        <span class="tw-nav-label" style="font-family:var(--tw-font-mono);font-size:11px;color:var(--tw-text-faint)">Redwood Labs · synthetic</span>
+      </nav>
+      <div class="tw-banner" id="tw-banner" role="status">
+        <span class="tw-banner-icon" aria-hidden="true">◈</span>
+        <p class="tw-banner-text"><strong>Synthetic data only.</strong> These 50 runs are fabricated, but the token counts are derived from real prompt lengths and the failure modes are ones you'd actually get paged for. <em>No live model, no real systems.</em></p>
+        <button class="tw-banner-dismiss" id="tw-banner-dismiss" aria-label="Dismiss banner">×</button>
+      </div>
+      <div class="tw-layout" id="tw-layout">
+        <aside class="tw-sidebar" aria-label="Failure clusters">
+          <div class="tw-sidebar-section">
+            <div class="tw-sidebar-heading">Failure Clusters</div>
+            <div class="tw-cluster-list" role="list" aria-label="Failure cluster filters"></div>
+          </div>
+          <hr class="tw-sidebar-divider" />
+          <div class="tw-sidebar-section">
+            <div class="tw-sidebar-heading">Agents</div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:11px;color:var(--tw-text-muted);padding:2px 8px;line-height:1.5;"><span style="color:var(--tw-success)">●</span> lead-enrichment-agent</div>
+              <div style="font-size:11px;color:var(--tw-text-muted);padding:2px 8px;line-height:1.5;"><span style="color:var(--tw-degraded)">●</span> outreach-sequencer</div>
+              <div style="font-size:11px;color:var(--tw-text-muted);padding:2px 8px;line-height:1.5;"><span style="color:var(--tw-failure)">●</span> contract-review-agent</div>
+            </div>
+          </div>
+        </aside>
+        <div class="tw-timeline-wrap" id="tw-timeline-wrap" role="main" aria-label="Agent run timeline">
+          <div class="tw-timeline-header">
+            <span class="tw-timeline-title">Run Timeline</span>
+            <span class="tw-timeline-count tw-mono" aria-live="polite">loading…</span>
+          </div>
+          <div class="tw-run-list" role="list" aria-label="Agent runs" aria-busy="true">
+            {Array.from({length: 8}).map(() => (
+              <div class="tw-run-row" style="opacity:0.25;pointer-events:none" aria-hidden="true">
+                <div><div style="height:11px;width:90px;background:var(--tw-hairline);border-radius:2px;margin-bottom:5px"></div><div style="height:9px;width:70px;background:var(--tw-hairline);border-radius:2px"></div></div>
+                <div style="height:11px;width:140px;background:var(--tw-hairline);border-radius:2px"></div>
+                <div style="height:11px;width:60px;background:var(--tw-hairline);border-radius:2px"></div>
+                <div style="height:11px;width:70px;background:var(--tw-hairline);border-radius:2px"></div>
+                <div style="height:11px;width:50px;background:var(--tw-hairline);border-radius:2px"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <section class="tw-inspector tw-hidden" id="tw-inspector" aria-label="Run inspector">
+          <div class="tw-inspector-header">
+            <div><div class="tw-inspector-run-id tw-mono">—</div><div class="tw-inspector-agent"></div></div>
+            <button class="tw-inspector-close" aria-label="Close inspector">×</button>
+          </div>
+          <div class="tw-ribbon-wrap" id="tw-ribbon-wrap"><div class="tw-ribbon-label" style="padding:var(--tw-space-3) var(--tw-space-4)">Select a run to view trace.</div></div>
+          <div class="tw-inspector-body">
+            <div class="tw-tree-panel" id="tw-tree-panel" role="tree" aria-label="Tool call tree"></div>
+            <div class="tw-detail-panel" id="tw-detail-panel"><p class="tw-detail-empty">Select a step to inspect.</p></div>
+          </div>
+        </section>
+      </div>
+      <div class="tw-about-section" id="tw-about">
+        <button class="tw-about-toggle" id="tw-about-toggle" aria-expanded="false" aria-controls="tw-about-body">
+          <span>About this demo — honest limits</span><span class="tw-about-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="tw-about-body" id="tw-about-body" role="region" aria-label="About Tracewell">
+          <div class="tw-about-col">
+            <h3>What this is</h3>
+            <ul>
+              <li>Portfolio demo showing production agent observability concepts</li>
+              <li>50 synthetic runs across 3 fictional agents at Redwood Labs (B2B SaaS)</li>
+              <li>Token counts derived from real prompt lengths — not fabricated</li>
+              <li>The v3→v4 compliance policy regression models a real class of production bug</li>
+              <li>Failure modes match what real teams get paged for at 3 AM</li>
+            </ul>
+          </div>
+          <div class="tw-about-col">
+            <h3>Honest limits</h3>
+            <ul>
+              <li>No live model — replay routes to a local JSON fixture, not a real LLM</li>
+              <li>No real agent data — all runs, companies, and contracts are synthetic</li>
+              <li>No ingestion SDK — this does not instrument real agents; it visualizes pre-recorded data</li>
+              <li>No persistent storage — session state is in-memory only</li>
+              <li>No multi-agent orchestration graphs — single-agent linear step trees only</li>
+              <li>Prompt diffs compare system-prompt snapshots, not full multi-turn histories</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>import '../components/app.ts';</script>
+  </body>
+</html>
