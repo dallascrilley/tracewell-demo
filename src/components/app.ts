@@ -1,10 +1,14 @@
 // Tracewell app entry — bundled by Astro/Vite
 import type { AgentRun, AgentStep } from './types.js';
-import { loadRuns, getLastSuccess } from './store.js';
+import { loadRuns } from './store.js';
 import {
   fmtTokens, fmtLatency, fmtTimestamp, tokenClass,
   failureBadgeClass, statusLabel, stepStatusIcon
 } from './format.js';
+import {
+  diagnoseRuns, buildRollup, buildClusters, pickHeadline,
+  type Finding, type Rollup, type Cluster,
+} from './diagnose.js';
 import { diff_match_patch } from 'diff-match-patch';
 
 // ─── Diff helper ────────────────────────────────────────────────────
@@ -73,31 +77,27 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// ─── Failure clusters ──────────────────────────────────────────────
-interface FailureCluster {
-  id: string; label: string; agentId: string;
-  failureMode: string; stepName: string; runIds: string[];
+// ─── Diagnosis state (derived from the loaded runs) ─────────────────
+let allRuns: AgentRun[] = [];
+let findings: Finding[] = [];
+let clusters: Cluster[] = [];
+let rollup: Rollup = { total: 0, failed: 0, degraded: 0, success: 0, by_mode: {} };
+let activeCluster: Cluster | null = null;
+let activeMode: string | null = null;
+let selectedRunId: string | null = null;
+
+/** Recompute findings / clusters / rollup from the current runs. */
+function recomputeDiagnosis(): void {
+  findings = diagnoseRuns(allRuns);
+  clusters = buildClusters(allRuns);
+  rollup = buildRollup(allRuns);
 }
 
-const CLUSTERS: FailureCluster[] = [
-  {
-    id: 'FP-01', label: 'context_overflow · inject_context',
-    agentId: 'contract-review-agent', failureMode: 'context_overflow',
-    stepName: 'inject_context',
-    runIds: ['run_8f2a1c','run_2d9e4f','run_a1b5c2','run_e7f3d8','run_c4a8b1','run_9d2e6a'],
-  },
-  {
-    id: 'FP-02', label: 'tool_timeout · smtp_send',
-    agentId: 'outreach-sequencer', failureMode: 'tool_timeout',
-    stepName: 'smtp_send',
-    runIds: ['run_b3c7e1','run_f8a2d4','run_5e9b3c'],
-  },
-];
-
-// ─── State ──────────────────────────────────────────────────────────
-let allRuns: AgentRun[] = [];
-let activeCluster: FailureCluster | null = null;
-let selectedRunId: string | null = null;
+/** Most recent successful run for an agent before a timestamp, within the current set. */
+function findLastSuccess(agentId: string, beforeTs: string): AgentRun | undefined {
+  const before = new Date(beforeTs).getTime();
+  return allRuns.find(r => r.agent_id === agentId && r.status === 'success' && new Date(r.started_at).getTime() < before);
+}
 
 // ─── Timeline ──────────────────────────────────────────────────────
 function renderTimeline(runs: AgentRun[]): void {
@@ -147,54 +147,168 @@ function renderTimeline(runs: AgentRun[]): void {
   });
 }
 
+// ─── Sidebar agents (status derived from the loaded runs, not hardcoded) ──
+function renderAgents(): void {
+  const list = document.getElementById('tw-agent-list');
+  if (!list) return;
+  const order: string[] = [];
+  const tally = new Map<string, { ok: number; degraded: number; failed: number }>();
+  for (const run of allRuns) {
+    if (!tally.has(run.agent_id)) { tally.set(run.agent_id, { ok: 0, degraded: 0, failed: 0 }); order.push(run.agent_id); }
+    const t = tally.get(run.agent_id)!;
+    if (run.status === 'failed') t.failed += 1;
+    else if (run.status === 'degraded') t.degraded += 1;
+    else t.ok += 1;
+  }
+  list.innerHTML = order.map(id => {
+    const t = tally.get(id)!;
+    // Worst status present sets the dot: any failure → red, else any degraded → amber, else green.
+    const color = t.failed > 0 ? '--tw-failure' : t.degraded > 0 ? '--tw-degraded' : '--tw-success';
+    const title = `${t.ok} ok · ${t.degraded} degraded · ${t.failed} failed`;
+    return `<div style="font-size:11px;color:var(--tw-text-muted);padding:2px 8px;line-height:1.5;" title="${esc(title)}">
+                <span style="color:var(${color})">●</span> ${esc(id)}
+              </div>`;
+  }).join('');
+}
+
 // ─── Sidebar clusters ──────────────────────────────────────────────
 function renderClusters(): void {
   const list = document.querySelector('.tw-cluster-list') as HTMLElement;
   if (!list) return;
-  list.innerHTML = CLUSTERS.map(c => `
+  if (!clusters.length) {
+    list.innerHTML = '<div class="tw-cluster-empty" style="font-size:11px;color:var(--tw-text-faint);padding:2px 8px">No failures — every run is clean.</div>';
+    return;
+  }
+  list.innerHTML = clusters.map(c => `
     <div class="tw-cluster${activeCluster?.id === c.id ? ' tw-active' : ''}" data-cluster-id="${c.id}" role="button" tabindex="0">
-      <div class="tw-cluster-id">${c.id}</div>
-      <div class="tw-cluster-desc">${c.agentId}<br>${c.failureMode}</div>
-      <span class="tw-cluster-count${c.failureMode === 'tool_timeout' ? ' tw-warning' : ''}">${c.runIds.length} runs</span>
+      <div class="tw-cluster-id">${c.failure_mode}</div>
+      <div class="tw-cluster-desc">${c.agent_id}</div>
+      <span class="tw-cluster-count${c.failure_mode === 'tool_timeout' ? ' tw-warning' : ''}">${c.run_ids.length} run${c.run_ids.length === 1 ? '' : 's'}</span>
     </div>`).join('');
 
   list.querySelectorAll('.tw-cluster').forEach(el => {
     el.addEventListener('click', () => {
       const id = (el as HTMLElement).dataset.clusterId;
-      const c = CLUSTERS.find(x => x.id === id)!;
+      const c = clusters.find(x => x.id === id);
+      if (!c) return;
       if (activeCluster?.id === id) {
-        activeCluster = null;
-        clearFilterUI();
-        renderTimeline(allRuns);
-        renderClusters();
+        clearFilter();
       } else {
         activeCluster = c;
+        activeMode = null;
         renderClusters();
-        renderTimeline(allRuns.filter(r => c.runIds.includes(r.id)));
-        showFilterUI(c);
+        renderTimeline(allRuns.filter(r => c.run_ids.includes(r.id)));
+        showFilterChip(`${c.agent_id} · ${c.failure_mode}`);
       }
     });
   });
 }
 
-function showFilterUI(c: FailureCluster): void {
+/** Filter the timeline to every run diagnosed with a given failure mode. */
+function filterByMode(mode: string): void {
+  if (activeMode === mode) { clearFilter(); return; }
+  activeCluster = null;
+  activeMode = mode;
+  renderClusters();
+  const ids = new Set(clusters.filter(c => c.failure_mode === mode).flatMap(c => c.run_ids));
+  renderTimeline(allRuns.filter(r => ids.has(r.id)));
+  showFilterChip(mode);
+}
+
+function showFilterChip(label: string): void {
   clearFilterUI();
   const header = document.querySelector('.tw-timeline-header');
   header?.insertAdjacentHTML('beforeend',
     `<div class="tw-filter-active">
-      <span>${c.id}</span>
+      <span>${label}</span>
       <button class="tw-clear-filter" aria-label="Clear filter">×</button>
     </div>`);
-  document.querySelector('.tw-clear-filter')?.addEventListener('click', () => {
-    activeCluster = null;
-    clearFilterUI();
-    renderTimeline(allRuns);
-    renderClusters();
-  });
+  document.querySelector('.tw-clear-filter')?.addEventListener('click', clearFilter);
+}
+
+function clearFilter(): void {
+  activeCluster = null;
+  activeMode = null;
+  clearFilterUI();
+  renderTimeline(allRuns);
+  renderClusters();
 }
 
 function clearFilterUI(): void {
   document.querySelector('.tw-filter-active')?.remove();
+}
+
+// ─── Hero (headline finding) + run-health rollup ───────────────────
+function renderHero(): void {
+  const card = document.getElementById('tw-hero-card');
+  if (!card) return;
+  const headline = pickHeadline(findings);
+  if (!headline) {
+    card.className = 'tw-hero-card tw-sev-clear';
+    card.innerHTML = `
+      <span class="tw-hero-eyebrow"><span class="tw-dot"></span>All clear</span>
+      <h1 class="tw-hero-title">No failed runs in this trace.</h1>
+      <p class="tw-hero-desc">Every run completed without a diagnosed failure. Paste a trace with failures to see the black box light up.</p>`;
+    return;
+  }
+  const sevClass = headline.severity === 'warning' ? ' tw-sev-warning' : '';
+  const sevLabel = headline.severity === 'warning' ? 'Degraded run' : 'Run failed in production';
+  card.className = `tw-hero-card${sevClass}`;
+  card.innerHTML = `
+    <span class="tw-hero-eyebrow"><span class="tw-dot"></span>${sevLabel} · ${esc(headline.type.replace(/_/g, ' '))}</span>
+    <h1 class="tw-hero-title">${esc(headline.title)}</h1>
+    <p class="tw-hero-desc">${esc(headline.description)}</p>
+    <div class="tw-hero-meta">
+      <span class="tw-hero-chip">agent <strong>${esc(headline.agent_id)}</strong></span>
+      ${headline.root_step_name ? `<span class="tw-hero-chip">root cause <strong>${esc(headline.root_step_name)}</strong></span>` : ''}
+      <span class="tw-hero-chip">owner <strong>${esc(headline.system_owner)}</strong></span>
+    </div>
+    <div class="tw-hero-fix"><strong>The fix —</strong> ${esc(headline.fix)}</div>
+    <button class="tw-hero-cta" id="tw-hero-cta" data-run-id="${esc(headline.run_id)}">Open the black box →</button>`;
+
+  document.getElementById('tw-hero-cta')?.addEventListener('click', () => {
+    const run = allRuns.find(r => r.id === headline.run_id);
+    if (!run) return;
+    selectRun(run);
+    document.getElementById('tw-layout')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+const MODE_LABELS: Record<string, string> = {
+  context_overflow: 'context overflow', tool_timeout: 'tool timeout',
+  guardrail_reject: 'guardrail reject', hallucination_detected: 'hallucination',
+  missing_input: 'missing input', agent_error: 'agent error',
+};
+
+function renderRollup(): void {
+  const el = document.getElementById('tw-hero-rollup');
+  if (!el) return;
+  const { total, failed, degraded, success } = rollup;
+  const pct = (n: number) => total ? (n / total) * 100 : 0;
+  const modeChips = Object.entries(rollup.by_mode)
+    .sort((a, b) => b[1] - a[1])
+    .map(([mode, n]) => `<button class="tw-rollup-mode" data-mode="${esc(mode)}"><strong>${n}</strong> ${esc(MODE_LABELS[mode] || mode)}</button>`)
+    .join('');
+  el.innerHTML = `
+    <div class="tw-rollup-heading">Run health · last ${total}</div>
+    <div class="tw-rollup-stats">
+      <div class="tw-rollup-stat"><span class="tw-rollup-num tw-n-fail">${failed}</span><span class="tw-rollup-label">Failed</span></div>
+      <div class="tw-rollup-stat"><span class="tw-rollup-num tw-n-degraded">${degraded}</span><span class="tw-rollup-label">Degraded</span></div>
+      <div class="tw-rollup-stat"><span class="tw-rollup-num tw-n-success">${success}</span><span class="tw-rollup-label">Clean</span></div>
+    </div>
+    <div class="tw-rollup-bar" role="img" aria-label="${failed} failed, ${degraded} degraded, ${success} clean of ${total} runs">
+      <span class="tw-b-fail" style="width:${pct(failed)}%"></span>
+      <span class="tw-b-degraded" style="width:${pct(degraded)}%"></span>
+      <span class="tw-b-success" style="width:${pct(success)}%"></span>
+    </div>
+    ${modeChips ? `<div class="tw-rollup-modes">${modeChips}</div>` : ''}`;
+
+  el.querySelectorAll('.tw-rollup-mode').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = (btn as HTMLElement).dataset.mode;
+      if (mode) { filterByMode(mode); document.getElementById('tw-layout')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
 }
 
 // ─── Run selection ─────────────────────────────────────────────────
@@ -498,7 +612,7 @@ function wireDetail(detail: HTMLElement, run: AgentRun, step: AgentStep): void {
       return;
     }
 
-    const lastSuccess = getLastSuccess(run.agent_id, run.started_at);
+    const lastSuccess = findLastSuccess(run.agent_id, run.started_at);
     if (!lastSuccess) {
       diffContainer.innerHTML = '<p class="tw-detail-empty">No previous success run found to diff against.</p>';
       return;
@@ -527,7 +641,7 @@ function wireDetail(detail: HTMLElement, run: AgentRun, step: AgentStep): void {
     out.textContent = 'Running synthetic replay…';
     await new Promise(r => setTimeout(r, 600));
     try {
-      const fixture = await fetch('/tracewell/data/runs-replay-fixture.json').then(r => r.json());
+      const fixture = await fetch('/data/runs-replay-fixture.json').then(r => r.json());
       const agentFix = fixture[run.agent_id] as Record<string, {output:string|null;error:string|null}>;
       const key = Object.keys(agentFix)[0];
       const res = agentFix[key];
@@ -551,7 +665,7 @@ function wireDetail(detail: HTMLElement, run: AgentRun, step: AgentStep): void {
     out.textContent = 'Replaying without v4 injection…';
     await new Promise(r => setTimeout(r, 800));
     try {
-      const fixture = await fetch('/tracewell/data/runs-replay-fixture.json').then(r => r.json());
+      const fixture = await fetch('/data/runs-replay-fixture.json').then(r => r.json());
       const fixed = fixture['contract-review-agent']['review_contract_v3_fixed'] as {output:string;tokens_in:number};
       out.className = 'tw-replay-output tw-replay-success';
       out.textContent = `✓ REPLAY SUCCESS — ${fixed.tokens_in?.toLocaleString() ?? '9,824'} tokens (under 8,192 limit)\n\n${fixed.output}`;
@@ -565,6 +679,111 @@ function wireDetail(detail: HTMLElement, run: AgentRun, step: AgentStep): void {
     } catch {
       out.className = 'tw-replay-output tw-replay-error';
       out.textContent = 'Fixture load failed.';
+    }
+  });
+}
+
+// ─── Import (real backend: POST /tracewell/analyze) ─────────────────
+function setModeBadge(label: string): void {
+  const badge = document.getElementById('tw-mode-badge');
+  if (badge) badge.textContent = label;
+}
+
+/** Swap in a new run set (uploaded or default) and re-render every view. */
+function setRuns(runs: AgentRun[]): void {
+  allRuns = runs.slice().sort((a, b) => new Date(b.started_at).getTime() - new Date(a.started_at).getTime());
+  activeCluster = null;
+  activeMode = null;
+  selectedRunId = null;
+  clearFilterUI();
+  recomputeDiagnosis();
+  renderHero();
+  renderRollup();
+  renderClusters();
+  renderAgents();
+  renderTimeline(allRuns);
+}
+
+async function runImport(raw: string, name: string): Promise<void> {
+  const status = document.getElementById('tw-import-status');
+  if (status) { status.textContent = 'Analyzing…'; status.className = 'tw-import-status'; }
+  try {
+    const res = await fetch('/tracewell/analyze', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ raw, name }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.error || `Server returned ${res.status}`);
+    setRuns(data.runs as AgentRun[]);
+    setModeBadge(`your trace · ${data.stats.findings} finding${data.stats.findings === 1 ? '' : 's'}`);
+    if (status) {
+      status.className = 'tw-import-status tw-import-status--ok';
+      status.textContent = `Diagnosed ${name}: ${data.stats.findings} finding${data.stats.findings === 1 ? '' : 's'} across ${data.stats.runs} run${data.stats.runs === 1 ? '' : 's'} (${data.stats.critical} critical).`;
+    }
+    // Rewrite the synthetic banner to the honest uploaded-trace boundary.
+    const banner = document.getElementById('tw-banner');
+    if (banner) {
+      banner.hidden = false;
+      banner.classList.add('tw-banner--live');
+      const icon = banner.querySelector('.tw-banner-icon');
+      const text = banner.querySelector('.tw-banner-text');
+      if (icon) icon.textContent = 'LIVE';
+      if (text) text.innerHTML = `<strong>Your trace — ${data.stats.runs} run${data.stats.runs === 1 ? '' : 's'} diagnosed server-side.</strong> ` +
+        `These findings were computed from the trace you provided (${esc(name)}), not synthetic data. ` +
+        `Tracewell analyzed a recorded export — not a live agent — and stored nothing.`;
+      document.getElementById('tw-layout')?.classList.add('tw-banner-visible');
+    }
+    document.getElementById('tw-import-panel')?.classList.add('tw-hidden');
+    document.getElementById('tw-import-toggle')?.setAttribute('aria-expanded', 'false');
+  } catch (err) {
+    console.error('[Tracewell] Import failed:', err);
+    if (status) {
+      status.className = 'tw-import-status tw-import-status--err';
+      status.textContent = err instanceof Error ? err.message : 'Import failed.';
+    }
+  }
+}
+
+function initImport(): void {
+  const toggle = document.getElementById('tw-import-toggle');
+  const panel = document.getElementById('tw-import-panel');
+  const fileInput = document.getElementById('tw-import-file') as HTMLInputElement | null;
+  const textarea = document.getElementById('tw-import-text') as HTMLTextAreaElement | null;
+  const analyzeBtn = document.getElementById('tw-import-analyze');
+  const sampleBtn = document.getElementById('tw-import-sample');
+
+  toggle?.addEventListener('click', () => {
+    const hidden = panel?.classList.toggle('tw-hidden');
+    toggle.setAttribute('aria-expanded', String(!hidden));
+  });
+
+  fileInput?.addEventListener('change', () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { if (textarea) textarea.value = String(reader.result || ''); runImport(textarea?.value || '', file.name); };
+    reader.readAsText(file);
+  });
+
+  analyzeBtn?.addEventListener('click', () => {
+    const raw = textarea?.value?.trim();
+    if (!raw) {
+      const s = document.getElementById('tw-import-status');
+      if (s) { s.className = 'tw-import-status tw-import-status--err'; s.textContent = 'Paste trace JSON or choose a file first.'; }
+      return;
+    }
+    runImport(raw, 'pasted-trace.json');
+  });
+
+  sampleBtn?.addEventListener('click', async () => {
+    try {
+      const text = await fetch('/data/sample-trace.json').then(r => r.text());
+      if (textarea) textarea.value = text;
+      runImport(text, 'sample-trace.json');
+    } catch {
+      const s = document.getElementById('tw-import-status');
+      if (s) { s.className = 'tw-import-status tw-import-status--err'; s.textContent = 'Could not load sample.'; }
     }
   });
 }
@@ -599,9 +818,15 @@ async function boot(): Promise<void> {
     document.getElementById('tw-layout')?.classList.remove('tw-inspector-open');
   });
 
-  // Load runs
+  initImport();
+
+  // Load synthetic runs, then diagnose + render hero / rollup / clusters / timeline.
   allRuns = await loadRuns();
+  recomputeDiagnosis();
+  renderHero();
+  renderRollup();
   renderClusters();
+  renderAgents();
   renderTimeline(allRuns);
 }
 

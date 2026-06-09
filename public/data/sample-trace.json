@@ -1,0 +1,130 @@
+[
+  {
+    "id": "run_acme_88",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-28T03:14:22Z",
+    "ended_at": "2026-05-28T03:14:51Z",
+    "status": "failed",
+    "failure_mode": "context_overflow",
+    "total_tokens_in": 14214,
+    "total_tokens_out": 0,
+    "total_latency_ms": 29341,
+    "steps": [
+      {
+        "id": "step_1", "parent_id": null, "name": "load_contract", "tool": "file_reader",
+        "status": "success", "tokens_in": 0, "tokens_out": 0, "latency_ms": 312,
+        "prompt_snapshot": null,
+        "output_snapshot": "[CONTRACT_TEXT: 6,200 words / MSA-2026-ACME-0088 — Acme Ventures LLC enterprise platform agreement]",
+        "error": null, "model": null, "model_params": null
+      },
+      {
+        "id": "step_2", "parent_id": null, "name": "inject_context", "tool": "context_builder",
+        "status": "success", "tokens_in": 0, "tokens_out": 0, "latency_ms": 88,
+        "prompt_snapshot": null,
+        "output_snapshot": "[INJECTED: compliance_policy_v4.md (4,400 tokens) + 3 prior contracts (1,614 tokens)]",
+        "error": null, "model": null, "model_params": null
+      },
+      {
+        "id": "step_3", "parent_id": null, "name": "review_contract", "tool": null,
+        "status": "failed", "tokens_in": 14214, "tokens_out": 0, "latency_ms": 28941,
+        "prompt_snapshot": "You are a contract review assistant for Redwood Labs legal operations.\n\n[COMPLIANCE POLICY — v4 — 4,400 tokens]\n# Compliance Policy v4 — COMPREHENSIVE EDITION\n...\n[contract body + 3 prior contracts appended]",
+        "output_snapshot": null,
+        "error": "context_length_exceeded: prompt is 14,214 tokens; this model supports a maximum of 8,192.",
+        "model": "gpt-4o-2026-03", "model_params": { "temperature": 0.2, "max_tokens": 8192 }
+      }
+    ]
+  },
+  {
+    "id": "run_outreach_42",
+    "agent_id": "outreach-sequencer",
+    "started_at": "2026-05-27T18:02:10Z",
+    "ended_at": "2026-05-27T18:03:41Z",
+    "status": "failed",
+    "failure_mode": "tool_timeout",
+    "total_tokens_in": 2100,
+    "total_tokens_out": 380,
+    "total_latency_ms": 91200,
+    "steps": [
+      {
+        "id": "step_1", "parent_id": null, "name": "draft_email", "tool": null,
+        "status": "success", "tokens_in": 2100, "tokens_out": 380, "latency_ms": 1200,
+        "prompt_snapshot": "Draft a follow-up email to the lead based on the last touch.",
+        "output_snapshot": "Subject: Quick follow-up on your platform eval…",
+        "error": null, "model": "gpt-4o-mini", "model_params": { "temperature": 0.7, "max_tokens": 800 }
+      },
+      {
+        "id": "step_2", "parent_id": null, "name": "smtp_send", "tool": "smtp_send",
+        "status": "failed", "tokens_in": 0, "tokens_out": 0, "latency_ms": 90000,
+        "prompt_snapshot": null, "output_snapshot": null,
+        "error": "tool_timeout: smtp_send did not return within 90000ms (mail relay unreachable).",
+        "model": null, "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_lead_19",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-27T11:48:55Z",
+    "ended_at": "2026-05-27T11:49:02Z",
+    "status": "failed",
+    "failure_mode": "missing_input",
+    "total_tokens_in": 0,
+    "total_tokens_out": 0,
+    "total_latency_ms": 410,
+    "steps": [
+      {
+        "id": "step_1", "parent_id": null, "name": "fetch_company", "tool": "crm_lookup",
+        "status": "failed", "tokens_in": 0, "tokens_out": 0, "latency_ms": 410,
+        "prompt_snapshot": null, "output_snapshot": null,
+        "error": "missing_input: required field 'domain' was null; enrichment cannot proceed.",
+        "model": null, "model_params": null
+      }
+    ]
+  },
+  {
+    "id": "run_contract_57",
+    "agent_id": "contract-review-agent",
+    "started_at": "2026-05-26T22:15:09Z",
+    "ended_at": "2026-05-26T22:15:33Z",
+    "status": "degraded",
+    "failure_mode": "guardrail_reject",
+    "total_tokens_in": 5400,
+    "total_tokens_out": 120,
+    "total_latency_ms": 8800,
+    "steps": [
+      {
+        "id": "step_1", "parent_id": null, "name": "review_contract", "tool": null,
+        "status": "failed", "tokens_in": 5400, "tokens_out": 120, "latency_ms": 8800,
+        "prompt_snapshot": "Summarize liability exposure and quote the indemnification clause verbatim.",
+        "output_snapshot": "[blocked]",
+        "error": "guardrail_reject: output blocked by legal-advice policy filter.",
+        "model": "gpt-4o-2026-03", "model_params": { "temperature": 0.2, "max_tokens": 2048 }
+      }
+    ]
+  },
+  {
+    "id": "run_lead_20",
+    "agent_id": "lead-enrichment-agent",
+    "started_at": "2026-05-26T09:30:00Z",
+    "ended_at": "2026-05-26T09:30:06Z",
+    "status": "success",
+    "failure_mode": null,
+    "total_tokens_in": 1800,
+    "total_tokens_out": 540,
+    "total_latency_ms": 5200,
+    "steps": [
+      {
+        "id": "step_1", "parent_id": null, "name": "fetch_company", "tool": "crm_lookup",
+        "status": "success", "tokens_in": 0, "tokens_out": 0, "latency_ms": 600,
+        "prompt_snapshot": null, "output_snapshot": "{ domain: \"northwind.example\", employees: 240 }",
+        "error": null, "model": null, "model_params": null
+      },
+      {
+        "id": "step_2", "parent_id": null, "name": "enrich_profile", "tool": null,
+        "status": "success", "tokens_in": 1800, "tokens_out": 540, "latency_ms": 4600,
+        "prompt_snapshot": "Summarize this company for a sales rep.", "output_snapshot": "Northwind is a 240-person logistics SaaS…",
+        "error": null, "model": "gpt-4o-mini", "model_params": { "temperature": 0.4, "max_tokens": 1024 }
+      }
+    ]
+  }
+]
