@@ -97,6 +97,16 @@ export function classifyFailure(run, rootStep) {
   return 'agent_error';
 }
 
+function failureModeForRollup(run) {
+  const steps = Array.isArray(run.steps) ? run.steps : [];
+  const hasFailedStep = steps.some((s) => s.status === 'failed');
+  const hasStatusNotice = Boolean(run.status_notice) || steps.some((s) => s.status_notice);
+  if (run.status_inferred_from_unknown && hasStatusNotice && !hasFailedStep && !run.failure_mode) {
+    return 'status_normalized';
+  }
+  return classifyFailure(run, findRootStep(run));
+}
+
 function severityOf(run) {
   if (run.status === 'failed') return 'critical';
   if (run.status === 'degraded') return 'warning';
@@ -164,7 +174,7 @@ export function buildRollup(runs) {
     else if (run.status === 'degraded') rollup.degraded += 1;
     else rollup.success += 1;
     if (run.status !== 'success') {
-      const mode = classifyFailure(run, findRootStep(run));
+      const mode = failureModeForRollup(run);
       rollup.by_mode[mode] = (rollup.by_mode[mode] || 0) + 1;
     }
   }
@@ -175,7 +185,7 @@ export function buildClusters(runs) {
   const map = new Map();
   for (const run of runs) {
     if (run.status === 'success') continue;
-    const mode = classifyFailure(run, findRootStep(run));
+    const mode = failureModeForRollup(run);
     const key = `${run.agent_id}·${mode}`;
     if (!map.has(key)) {
       map.set(key, { id: key, agent_id: run.agent_id, failure_mode: mode, run_ids: [] });
