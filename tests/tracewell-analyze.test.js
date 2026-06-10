@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import {
-  analyze, classifyFailure, findRootStep, diagnoseRun, PLAYBOOK,
+  analyze, classifyFailure, findRootStep, diagnoseRun, onRequestPost, PLAYBOOK,
 } from '../functions/tracewell/analyze.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -96,4 +96,59 @@ test('analyze rejects empty and malformed input', () => {
   assert.throws(() => analyze('{ not json'), /does not parse as JSON/);
   assert.throws(() => analyze('5'), /Unsupported JSON shape/);
   assert.throws(() => analyze('[]'), /No runs found/);
+});
+
+test('analyze echoes the offending input when JSON parsing fails', () => {
+  assert.throws(() => analyze('{ not json'), (e) =>
+    e.message.includes('got: "{ not json"') && e.message.includes('does not parse as JSON'));
+  // long garbage is truncated to ~40 chars with an ellipsis
+  assert.throws(() => analyze('z'.repeat(100)), (e) =>
+    e.message.includes(`got: "${'z'.repeat(40)}"…`));
+  // quotes/control chars in the echo are escaped, not interpolated raw
+  assert.throws(() => analyze('"oops\n'), (e) => e.message.includes('got: "\\"oops"'));
+});
+
+test('analyze names the found top-level keys for an unsupported object shape', () => {
+  assert.throws(() => analyze('{"foo": 1, "bar": 2}'), (e) =>
+    e.message.includes('top-level keys [foo, bar]') &&
+    e.message.includes('Accepted shapes') &&
+    e.message.includes('a run object (with `steps`, `id`, or `agent_id`)') &&
+    e.message.includes('an array of run objects') &&
+    e.message.includes('{"runs": [...]}'));
+  assert.throws(() => analyze('{}'), /an object with no top-level keys/);
+  assert.throws(() => analyze('5'), /got number, not an object or array/);
+  assert.throws(() => analyze('null'), /got null, not an object or array/);
+});
+
+const postCtx = (body) => ({
+  request: new Request('http://local/tracewell/analyze', { method: 'POST', body }),
+});
+
+test('onRequestPost names a missing or mistyped `raw` field', async () => {
+  const missing = await onRequestPost(postCtx(JSON.stringify({ name: 'trace.json' })));
+  assert.equal(missing.status, 400);
+  const missingOut = await missing.json();
+  assert.match(missingOut.error, /POST body must be JSON: \{"raw": "<trace JSON as a string>", "name": "optional"\}/);
+  assert.match(missingOut.error, /`raw` is missing/);
+
+  const mistyped = await onRequestPost(postCtx(JSON.stringify({ raw: { id: 'run_1' } })));
+  assert.equal(mistyped.status, 400);
+  const mistypedOut = await mistyped.json();
+  assert.match(mistypedOut.error, /`raw` is of type object, not a string/);
+  assert.match(mistypedOut.error, /Stringify your trace/);
+});
+
+test('onRequestPost rejects a non-JSON request body with the expected body shape', async () => {
+  const res = await onRequestPost(postCtx('this is not json'));
+  assert.equal(res.status, 400);
+  const out = await res.json();
+  assert.match(out.error, /POST body must be JSON: \{"raw": "<trace JSON as a string>", "name": "optional"\}/);
+  assert.match(out.error, /request body did not parse as JSON/);
+});
+
+test('onRequestPost passes analyze()’s specific messages through to the 400 body', async () => {
+  const res = await onRequestPost(postCtx(JSON.stringify({ raw: '{"foo": 1}' })));
+  assert.equal(res.status, 400);
+  const out = await res.json();
+  assert.match(out.error, /Unsupported JSON shape — got an object with top-level keys \[foo\]/);
 });

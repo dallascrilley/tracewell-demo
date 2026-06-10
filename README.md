@@ -23,6 +23,30 @@ pnpm dev
 
 Open `http://localhost:4321`. The demo loads synthetic data from `public/data/runs.json`.
 
+## Input schema — `POST /tracewell/analyze`
+
+The endpoint takes a JSON body with your trace JSON **as a string** in `raw`:
+
+```json
+{ "raw": "<trace JSON as a string>", "name": "optional" }
+```
+
+`raw` must parse to one of three accepted shapes:
+
+1. **A single run object** — identified by any of `steps`, `id`, or `agent_id`. Recognized run fields: `id`, `agent_id`, `status` (`failed|degraded|success`), `failure_mode`, `started_at`, `ended_at`, `steps[]`. Recognized step fields: `id`, `parent_id`, `name`, `tool`, `status` (`success|failed|skipped`), `tokens_in`, `tokens_out`, `latency_ms`, `error`, `model`, `model_params`. Missing fields are normalized with sensible defaults; unknown fields are ignored.
+2. **An array of runs** — `[ <run>, <run>, … ]`
+3. **A wrapped object** — `{ "runs": [ <run>, … ] }`
+
+Minimal valid example:
+
+```bash
+curl -s https://demos.dallascrilley.com/tracewell/analyze \
+  -H 'content-type: application/json' \
+  -d '{"raw": "{\"id\":\"run_1\",\"agent_id\":\"support-bot\",\"status\":\"failed\",\"steps\":[{\"name\":\"send\",\"status\":\"failed\",\"error\":\"tool_timeout: deadline exceeded\"}]}"}'
+```
+
+Malformed input gets a field-specific `400` that names what was wrong and what was expected (missing/mistyped `raw`, unparseable trace JSON with the offending prefix echoed back, or an unsupported shape with the top-level keys it actually found).
+
 ## Architecture
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for design decisions, data schema, and tradeoffs.

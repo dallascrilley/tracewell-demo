@@ -237,7 +237,11 @@ export function analyze(raw) {
   try {
     parsed = JSON.parse(raw.trim());
   } catch {
-    throw new Error('Input does not parse as JSON. Expected a run object or an array of runs.');
+    const head = raw.trim().slice(0, 40);
+    const ellipsis = raw.trim().length > 40 ? '…' : '';
+    throw new Error(
+      `Input does not parse as JSON (got: ${JSON.stringify(head)}${ellipsis}). Expected a run object or an array of runs.`,
+    );
   }
 
   let inputFormat;
@@ -252,7 +256,18 @@ export function analyze(raw) {
     rawRuns = [parsed];
     inputFormat = 'json-run';
   } else {
-    throw new Error('Unsupported JSON shape — expected a run object (with steps) or an array of runs.');
+    const accepted =
+      'Accepted shapes: a run object (with `steps`, `id`, or `agent_id`), an array of run objects, or {"runs": [...]}.';
+    if (parsed && typeof parsed === 'object') {
+      const keys = Object.keys(parsed);
+      const found = keys.length
+        ? `an object with top-level keys [${keys.slice(0, 10).join(', ')}]`
+        : 'an object with no top-level keys';
+      throw new Error(`Unsupported JSON shape — got ${found}, none of which identify a run. ${accepted}`);
+    }
+    throw new Error(
+      `Unsupported JSON shape — got ${parsed === null ? 'null' : typeof parsed}, not an object or array. ${accepted}`,
+    );
   }
 
   if (!rawRuns.length) throw new Error('No runs found in the trace.');
@@ -283,10 +298,27 @@ export function analyze(raw) {
   };
 }
 
+const BODY_SHAPE = 'POST body must be JSON: {"raw": "<trace JSON as a string>", "name": "optional"}';
+
 export async function onRequestPost(context) {
+  let body;
   try {
-    const body = await context.request.json();
-    const { raw, name } = body || {};
+    body = await context.request.json();
+  } catch {
+    return json({ error: `${BODY_SHAPE} — the request body did not parse as JSON.` }, { status: 400 });
+  }
+  const { raw, name } = body || {};
+  if (typeof raw !== 'string') {
+    const got =
+      raw === undefined
+        ? '`raw` is missing'
+        : `\`raw\` is ${raw === null ? 'null' : Array.isArray(raw) ? 'an array' : `of type ${typeof raw}`}, not a string`;
+    return json(
+      { error: `${BODY_SHAPE} — ${got}. Stringify your trace and send it as the \`raw\` field.` },
+      { status: 400 },
+    );
+  }
+  try {
     const result = analyze(raw);
     return json({ ...result, name: typeof name === 'string' && name ? name : 'uploaded-trace.json' });
   } catch (error) {
