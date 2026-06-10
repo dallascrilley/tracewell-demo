@@ -9,7 +9,7 @@ import {
 } from '../functions/tracewell/analyze.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const sampleTrace = readFileSync(join(here, '../public/tracewell/data/sample-trace.json'), 'utf8');
+const sampleTrace = readFileSync(join(here, '../public/data/sample-trace.json'), 'utf8');
 
 test('classifyFailure prefers the declared failure_mode when valid', () => {
   const run = { failure_mode: 'tool_timeout', steps: [{ status: 'failed', error: 'context_length_exceeded' }] };
