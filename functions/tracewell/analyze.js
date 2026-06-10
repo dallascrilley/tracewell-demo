@@ -125,6 +125,15 @@ function describe(run, rootStep, mode) {
 export function diagnoseRun(run) {
   const severity = severityOf(run);
   if (severity === 'healthy') return null;
+  const failedSteps = Array.isArray(run.steps) ? run.steps.filter((s) => s.status === 'failed') : [];
+  if (
+    severity === 'warning' &&
+    run.status_inferred_from_unknown &&
+    failedSteps.length === 0 &&
+    !run.failure_mode
+  ) {
+    return null;
+  }
   const rootStep = findRootStep(run);
   const mode = classifyFailure(run, rootStep);
   const play = PLAYBOOK[mode] || PLAYBOOK.agent_error;
@@ -189,17 +198,22 @@ export function pickHeadline(findings) {
 // ─── Normalization ─────────────────────────────────────────────────────────────
 
 const RUN_STATUS = new Set(['success', 'failed', 'degraded']);
+const STEP_STATUS = new Set(['success', 'failed', 'skipped']);
+const ERROR_STATUS = /fail|error|exception|crash|timeout|abort/i;
 
 /** Coerce a loose run object into the canonical shape the client renders. */
 function normalizeRun(raw, i) {
   const steps = Array.isArray(raw.steps) ? raw.steps.map((s, j) => normalizeStep(s, j)) : [];
-  const status = RUN_STATUS.has(raw.status) ? raw.status : (steps.some((s) => s.status === 'failed') ? 'failed' : 'success');
+  const runStatus = normalizeRunStatus(raw.status, steps);
   return {
     id: String(raw.id || `run_${i + 1}`),
     agent_id: String(raw.agent_id || raw.agent || 'imported-agent'),
     started_at: raw.started_at || '',
     ended_at: raw.ended_at || '',
-    status,
+    status: runStatus.status,
+    status_notice: runStatus.notice,
+    status_raw: runStatus.raw,
+    status_inferred_from_unknown: runStatus.inferredFromUnknown,
     failure_mode: raw.failure_mode || null,
     total_tokens_in: Number(raw.total_tokens_in) || steps.reduce((n, s) => n + s.tokens_in, 0),
     total_tokens_out: Number(raw.total_tokens_out) || steps.reduce((n, s) => n + s.tokens_out, 0),
@@ -209,12 +223,15 @@ function normalizeRun(raw, i) {
 }
 
 function normalizeStep(raw, j) {
+  const stepStatus = normalizeStepStatus(raw.status);
   return {
     id: String(raw.id || `step_${j + 1}`),
     parent_id: raw.parent_id ?? null,
     name: String(raw.name || `step_${j + 1}`),
     tool: raw.tool ?? null,
-    status: ['success', 'failed', 'skipped'].includes(raw.status) ? raw.status : 'success',
+    status: stepStatus.status,
+    status_notice: stepStatus.notice,
+    status_raw: stepStatus.raw,
     tokens_in: Number(raw.tokens_in) || 0,
     tokens_out: Number(raw.tokens_out) || 0,
     latency_ms: Number(raw.latency_ms) || 0,
@@ -224,6 +241,81 @@ function normalizeStep(raw, j) {
     model: raw.model ?? null,
     model_params: raw.model_params ?? null,
   };
+}
+
+function normalizeStepStatus(rawStatus) {
+  if (STEP_STATUS.has(rawStatus)) return { status: rawStatus, notice: null, raw: null };
+  if (typeof rawStatus !== 'string' || !rawStatus.trim()) return { status: 'success', notice: null, raw: null };
+  const raw = rawStatus.trim();
+  const status = ERROR_STATUS.test(raw) ? 'failed' : 'skipped';
+  return {
+    status,
+    raw,
+    notice: `Unrecognized step status "${raw}" normalized to "${status}" so it is not counted as success.`,
+  };
+}
+
+function normalizeRunStatus(rawStatus, steps) {
+  if (RUN_STATUS.has(rawStatus)) return { status: rawStatus, notice: null, raw: null, inferredFromUnknown: false };
+  const hasFailedStep = steps.some((s) => s.status === 'failed');
+  const hasUnknownStep = steps.some((s) => s.status_notice);
+  if (typeof rawStatus === 'string' && rawStatus.trim()) {
+    const raw = rawStatus.trim();
+    const status = ERROR_STATUS.test(raw) || hasFailedStep ? 'failed' : 'degraded';
+    return {
+      status,
+      raw,
+      inferredFromUnknown: true,
+      notice: `Unrecognized run status "${raw}" normalized to "${status}" so it is not counted as success.`,
+    };
+  }
+  if (hasFailedStep) return { status: 'failed', notice: null, raw: null, inferredFromUnknown: false };
+  if (hasUnknownStep) return { status: 'degraded', notice: null, raw: null, inferredFromUnknown: true };
+  return { status: 'success', notice: null, raw: null, inferredFromUnknown: false };
+}
+
+function buildStatusNormalizationFindings(runs) {
+  return runs.flatMap((run) => {
+    const findings = [];
+    if (run.status_notice) {
+      findings.push({
+        id: `N-${run.id}-status`,
+        run_id: run.id,
+        agent_id: run.agent_id || 'unknown-agent',
+        severity: 'warning',
+        type: 'status_normalized',
+        title: 'Unrecognized run status normalized',
+        root_step_id: null,
+        root_step_name: null,
+        system_owner: 'Trace exporter / runtime adapter',
+        description: run.status_notice,
+        fix: 'Update the trace exporter to emit one of: success, failed, degraded.',
+        started_at: run.started_at || '',
+        tokens_in: run.total_tokens_in || 0,
+        latency_ms: run.total_latency_ms || 0,
+      });
+    }
+    for (const step of run.steps || []) {
+      if (!step.status_notice) continue;
+      findings.push({
+        id: `N-${run.id}-${step.id}-status`,
+        run_id: run.id,
+        agent_id: run.agent_id || 'unknown-agent',
+        severity: 'warning',
+        type: 'status_normalized',
+        title: 'Unrecognized step status normalized',
+        root_step_id: step.id,
+        root_step_name: step.name,
+        system_owner: 'Trace exporter / runtime adapter',
+        description: step.status_notice,
+        fix: 'Update the trace exporter to emit one of: success, failed, skipped.',
+        started_at: run.started_at || '',
+        tokens_in: run.total_tokens_in || 0,
+        latency_ms: run.total_latency_ms || 0,
+      });
+    }
+    return findings;
+  });
 }
 
 // ─── Orchestration ───────────────────────────────────────────────────────────
@@ -275,7 +367,10 @@ export function analyze(raw) {
   const runs = rawRuns.map(normalizeRun).sort((a, b) =>
     new Date(b.started_at || 0).getTime() - new Date(a.started_at || 0).getTime());
 
-  const findings = runs.map(diagnoseRun).filter(Boolean);
+  const findings = [
+    ...runs.map(diagnoseRun).filter(Boolean),
+    ...buildStatusNormalizationFindings(runs),
+  ];
   const rollup = buildRollup(runs);
   const clusters = buildClusters(runs);
   const headline = pickHeadline(findings);

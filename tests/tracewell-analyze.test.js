@@ -91,6 +91,30 @@ test('analyze normalizes a loose run (missing totals/ids) without throwing', () 
   assert.equal(out.findings[0].type, 'missing_input');
 });
 
+test('analyze never coerces an error step status to success', () => {
+  const trace = JSON.stringify([{ id: 'bad-status', agent_id: 'runner', steps: [{ id: 's1', name: 'send', status: 'error', error: 'tool exploded' }] }]);
+  const out = analyze(trace);
+  assert.equal(out.runs[0].status, 'failed');
+  assert.equal(out.runs[0].steps[0].status, 'failed');
+  assert.equal(out.stats.critical, 1);
+  assert.ok(out.findings.some((f) =>
+    f.type === 'status_normalized' &&
+    f.severity === 'warning' &&
+    f.description.includes('"error"') &&
+    f.description.includes('not counted as success')));
+});
+
+test('analyze reports benign unknown step statuses as normalization notices', () => {
+  const trace = JSON.stringify([{ id: 'queued-status', agent_id: 'runner', steps: [{ id: 's1', name: 'wait', status: 'queued' }] }]);
+  const out = analyze(trace);
+  assert.equal(out.runs[0].status, 'degraded');
+  assert.equal(out.runs[0].steps[0].status, 'skipped');
+  assert.equal(out.rollup.success, 0);
+  assert.equal(out.stats.critical, 0);
+  assert.deepEqual(out.findings.map((f) => f.type), ['status_normalized']);
+  assert.match(out.findings[0].description, /"queued" normalized to "skipped"/);
+});
+
 test('analyze rejects empty and malformed input', () => {
   assert.throws(() => analyze(''), /Paste or upload an agent-run trace/);
   assert.throws(() => analyze('{ not json'), /does not parse as JSON/);
