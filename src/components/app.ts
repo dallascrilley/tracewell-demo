@@ -187,7 +187,7 @@ function renderClusters(): void {
     </div>`).join('');
 
   list.querySelectorAll('.tw-cluster').forEach(el => {
-    el.addEventListener('click', () => {
+    const activate = () => {
       const id = (el as HTMLElement).dataset.clusterId;
       const c = clusters.find(x => x.id === id);
       if (!c) return;
@@ -200,6 +200,14 @@ function renderClusters(): void {
         renderTimeline(allRuns.filter(r => c.run_ids.includes(r.id)));
         showFilterChip(`${c.agent_id} · ${c.failure_mode}`);
       }
+    };
+    el.addEventListener('click', activate);
+    el.addEventListener('keydown', (e) => {
+      const key = (e as KeyboardEvent).key;
+      if (key === 'Enter' || key === ' ') {
+        e.preventDefault();
+        activate();
+      }
     });
   });
 }
@@ -209,6 +217,7 @@ function filterByMode(mode: string): void {
   if (activeMode === mode) { clearFilter(); return; }
   activeCluster = null;
   activeMode = mode;
+  syncModeChipPressed();
   renderClusters();
   const ids = new Set(clusters.filter(c => c.failure_mode === mode).flatMap(c => c.run_ids));
   renderTimeline(allRuns.filter(r => ids.has(r.id)));
@@ -226,9 +235,16 @@ function showFilterChip(label: string): void {
   document.querySelector('.tw-clear-filter')?.addEventListener('click', clearFilter);
 }
 
+function syncModeChipPressed(): void {
+  document.querySelectorAll<HTMLButtonElement>('.tw-rollup-mode').forEach(btn => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.mode === activeMode));
+  });
+}
+
 function clearFilter(): void {
   activeCluster = null;
   activeMode = null;
+  syncModeChipPressed();
   clearFilterUI();
   renderTimeline(allRuns);
   renderClusters();
@@ -287,7 +303,7 @@ function renderRollup(): void {
   const pct = (n: number) => total ? (n / total) * 100 : 0;
   const modeChips = Object.entries(rollup.by_mode)
     .sort((a, b) => b[1] - a[1])
-    .map(([mode, n]) => `<button class="tw-rollup-mode" data-mode="${esc(mode)}"><strong>${n}</strong> ${esc(MODE_LABELS[mode] || mode)}</button>`)
+    .map(([mode, n]) => `<button class="tw-rollup-mode" data-mode="${esc(mode)}" aria-pressed="${activeMode === mode}"><strong>${n}</strong> ${esc(MODE_LABELS[mode] || mode)}</button>`)
     .join('');
   el.innerHTML = `
     <div class="tw-rollup-heading">Run health · last ${total}</div>

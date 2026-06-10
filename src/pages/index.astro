@@ -1,4 +1,6 @@
 ---
+// Tracewell — flight recorder for AI agents
+// Static page; all data loaded client-side from /data/runs.json
 import '../styles/tracewell.css';
 const title = "Tracewell — Your agent failed in production. Here's the black box.";
 const description = "The flight recorder for AI agents. Every tool call, every token, every prompt — and the one diff that broke it.";
@@ -21,6 +23,8 @@ const description = "The flight recorder for AI agents. Every tool call, every t
   </head>
   <body style="background:oklch(15% 0.012 250);color:oklch(93% 0.008 250);">
     <div class="tw-root tw-shell" id="tw-app">
+
+      <!-- Nav -->
       <nav class="tw-nav" aria-label="Tracewell navigation">
         <span class="tw-nav-logo">tracewell</span>
         <span class="tw-nav-sep" aria-hidden="true"></span>
@@ -31,10 +35,14 @@ const description = "The flight recorder for AI agents. Every tool call, every t
         <span class="tw-nav-badge" id="tw-mode-badge">synthetic · demo</span>
       </nav>
 
+      <!-- Import panel — real backend (POST /tracewell/analyze) -->
       <div class="tw-import-panel tw-hidden" id="tw-import-panel" role="region" aria-label="Analyze an agent-run trace">
         <div class="tw-import-head">
           <strong>Diagnose your own agent trace.</strong>
-          Paste or upload a recorded run trace. The server classifies failure modes and returns a fix from <em>your</em> trace. Nothing is stored.
+          Paste or upload a recorded run trace — a single run object or a JSON array of runs
+          (<span class="tw-mono">id, agent_id, status, steps[…]</span>). The server classifies each run's
+          failure mode, pins the root-cause step, and returns a fix — computed entirely from <em>your</em> trace.
+          It analyzes a recorded export, not a live agent. Nothing is stored.
         </div>
         <div class="tw-import-controls">
           <label class="tw-import-filebtn">
@@ -45,22 +53,24 @@ const description = "The flight recorder for AI agents. Every tool call, every t
           <a class="tw-import-link" href="/data/sample-trace.json" download>Download sample</a>
         </div>
         <textarea id="tw-import-text" class="tw-import-text" rows="5" spellcheck="false"
-          placeholder='Paste trace JSON: [{ "id", "agent_id", "status", "steps": [...] }]'></textarea>
+          placeholder='…or paste trace JSON here. Shape: [{ "id", "agent_id", "status": "failed|degraded|success", "failure_mode", "steps": [{ "name", "status", "tokens_in", "latency_ms", "error", "model_params" }] }]'></textarea>
         <div class="tw-import-actions">
           <button class="tw-import-btn tw-import-btn--primary" id="tw-import-analyze" type="button">Analyze trace</button>
           <span class="tw-import-status" id="tw-import-status" role="status"></span>
         </div>
       </div>
 
+      <!-- Synthetic data banner -->
       <div class="tw-banner" id="tw-banner" role="status">
         <span class="tw-banner-icon">SYN</span>
         <p class="tw-banner-text">
           <strong>Every number here is synthetic — and honestly labeled.</strong>
-          Default 50 runs are fabricated; token counts derive from real prompt lengths. Use <em>Analyze your trace</em> for the live backend.
+          Tracewell is a portfolio demo: the 50 runs are fabricated, but the token counts are derived from real prompt lengths and the failure modes are ones you'd actually get paged for. No live model, no real systems, no invented benchmarks. <em>That discipline is the point.</em>
         </p>
         <button class="tw-banner-dismiss" aria-label="Dismiss banner" id="tw-banner-dismiss">×</button>
       </div>
 
+      <!-- Hero: lead with the headline failure + a run-health rollup, above the fold -->
       <section class="tw-hero" id="tw-hero" aria-label="Top finding and run health">
         <article class="tw-hero-card" id="tw-hero-card" aria-live="polite">
           <div class="tw-hero-skeleton">Diagnosing runs…</div>
@@ -68,13 +78,17 @@ const description = "The flight recorder for AI agents. Every tool call, every t
         <aside class="tw-hero-rollup" id="tw-hero-rollup" aria-label="Run health rollup"></aside>
       </section>
 
+      <!-- Scope signal divider — decorative oscilloscope trace between hero and timeline -->
       <div class="tw-scope" aria-hidden="true">
         <svg class="tw-scope-svg" viewBox="0 0 1200 36" preserveAspectRatio="none" focusable="false">
           <path class="tw-scope-line" d="M0 18 L120 18 L150 18 L162 6 L174 30 L186 9 L198 27 L210 18 L470 18 L500 18 L512 18 L524 4 L536 32 L548 18 L820 18 L850 18 L862 13 L874 23 L886 18 L1080 18 L1110 18 L1122 8 L1134 28 L1146 18 L1200 18" />
         </svg>
       </div>
 
+      <!-- Main layout -->
       <div class="tw-layout" id="tw-layout">
+
+        <!-- Sidebar: failure clusters -->
         <aside class="tw-sidebar" aria-label="Failure clusters">
           <div class="tw-sidebar-section">
             <div class="tw-sidebar-heading">Failure Clusters</div>
@@ -87,11 +101,13 @@ const description = "The flight recorder for AI agents. Every tool call, every t
           </div>
         </aside>
 
+        <!-- Timeline -->
         <div class="tw-timeline-wrap" id="tw-timeline-wrap" role="main" aria-label="Agent run timeline">
           <div class="tw-timeline-header">
             <span class="tw-timeline-title">Run Timeline</span>
             <span class="tw-timeline-count tw-mono" aria-live="polite">loading…</span>
           </div>
+          <!-- Column header — instrument readout legend (sibling of the JS-populated list) -->
           <div class="tw-run-cols" aria-hidden="true">
             <span class="tw-run-col">run · started</span>
             <span class="tw-run-col">agent</span>
@@ -99,9 +115,24 @@ const description = "The flight recorder for AI agents. Every tool call, every t
             <span class="tw-run-col tw-run-col--num">tokens</span>
             <span class="tw-run-col tw-run-col--num">latency</span>
           </div>
-          <div class="tw-run-list" role="list" aria-label="Agent runs" aria-busy="true"></div>
+          <div class="tw-run-list" role="list" aria-label="Agent runs" aria-busy="true">
+            <!-- skeleton -->
+            {Array.from({length: 8}).map(() => (
+              <div class="tw-run-row" style="opacity:0.25;pointer-events:none" aria-hidden="true">
+                <div>
+                  <div style="height:11px;width:90px;background:var(--tw-hairline);border-radius:2px;margin-bottom:5px"></div>
+                  <div style="height:9px;width:70px;background:var(--tw-hairline);border-radius:2px"></div>
+                </div>
+                <div style="height:11px;width:140px;background:var(--tw-hairline);border-radius:2px"></div>
+                <div style="height:11px;width:60px;background:var(--tw-hairline);border-radius:2px"></div>
+                <div style="height:11px;width:70px;background:var(--tw-hairline);border-radius:2px"></div>
+                <div style="height:11px;width:50px;background:var(--tw-hairline);border-radius:2px"></div>
+              </div>
+            ))}
+          </div>
         </div>
 
+        <!-- Run Inspector (hidden until a run is selected) -->
         <section class="tw-inspector tw-hidden" id="tw-inspector" aria-label="Run inspector">
           <div class="tw-inspector-header">
             <div>
@@ -110,9 +141,13 @@ const description = "The flight recorder for AI agents. Every tool call, every t
             </div>
             <button class="tw-inspector-close" aria-label="Close inspector">×</button>
           </div>
+
+          <!-- Trace ribbon -->
           <div class="tw-ribbon-wrap" id="tw-ribbon-wrap">
             <div class="tw-ribbon-label" style="padding:var(--tw-space-3) var(--tw-space-4)">Select a run to view trace.</div>
           </div>
+
+          <!-- Tree + detail split -->
           <div class="tw-inspector-body">
             <div class="tw-tree-panel" id="tw-tree-panel" role="tree" aria-label="Tool call tree"></div>
             <div class="tw-detail-panel" id="tw-detail-panel">
@@ -120,8 +155,10 @@ const description = "The flight recorder for AI agents. Every tool call, every t
             </div>
           </div>
         </section>
-      </div>
 
+      </div><!-- /.tw-layout -->
+
+      <!-- About / honest limits (pinned footer) -->
       <div class="tw-about-section" id="tw-about">
         <button class="tw-about-toggle" id="tw-about-toggle" aria-expanded="false" aria-controls="tw-about-body">
           <span>About this demo — honest limits</span>
@@ -131,21 +168,29 @@ const description = "The flight recorder for AI agents. Every tool call, every t
           <div class="tw-about-col">
             <h3>What this is</h3>
             <ul>
-              <li>Portfolio demo for agent observability concepts</li>
-              <li>50 synthetic runs across 3 fictional agents</li>
-              <li><strong>Analyze your trace</strong> runs a real Cloudflare Function at <code>POST /tracewell/analyze</code></li>
+              <li>Portfolio demo showing production agent observability concepts</li>
+              <li>50 synthetic runs across 3 fictional agents at Redwood Labs (B2B SaaS)</li>
+              <li>Token counts derived from real prompt lengths — not fabricated</li>
+              <li>The v3→v4 compliance policy regression models a real class of production bug</li>
+              <li>Failure modes match what real teams get paged for at 3 AM</li>
+              <li><strong>“Analyze your trace” runs a real Cloudflare backend</strong> — server-side rules diagnose a trace you paste; the default 50 runs are synthetic</li>
             </ul>
           </div>
           <div class="tw-about-col">
             <h3>Honest limits</h3>
             <ul>
-              <li>No live model or real agent instrumentation</li>
-              <li>No persistent storage — refresh resets session state</li>
+              <li>No live model — replay routes to a local JSON fixture, not a real LLM</li>
+              <li>No real agent data — all runs, companies, and contracts are synthetic</li>
+              <li>No ingestion SDK — this does not instrument real agents; it visualizes pre-recorded data</li>
+              <li>No persistent storage — session state is in-memory only; refreshing resets everything</li>
+              <li>No multi-agent orchestration graphs — single-agent linear step trees only</li>
+              <li>Prompt diffs compare system-prompt snapshots, not full multi-turn conversation histories</li>
             </ul>
           </div>
         </div>
       </div>
-    </div>
+
+    </div><!-- /#tw-app -->
 
     <script>
       import '../components/app.ts';

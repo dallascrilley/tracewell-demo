@@ -2,7 +2,7 @@
 
 > **Your agent failed in production. Here's the black box.**
 
-Tracewell is a client-side, interactive flight recorder for AI agent runs. It renders 50 synthetic agent executions as a clickable timeline with per-step token accounting, prompt diffing, and synthetic replay. No backend, no API keys, no live model calls.
+Tracewell is an interactive flight recorder for AI agent runs. It renders 50 synthetic agent executions as a clickable timeline with per-step token accounting, prompt diffing, and synthetic replay — all client-side. An optional **Analyze your trace** panel posts a pasted trace to a real Cloudflare Pages Function (`POST /tracewell/analyze`) that classifies failure modes server-side. No API keys, no live model calls, nothing stored.
 
 **Live demo:** [demos.dallascrilley.com/tracewell](https://demos.dallascrilley.com/tracewell)
 
