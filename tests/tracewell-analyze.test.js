@@ -110,6 +110,8 @@ test('analyze reports benign unknown step statuses as normalization notices', ()
   assert.equal(out.runs[0].status, 'degraded');
   assert.equal(out.runs[0].steps[0].status, 'skipped');
   assert.equal(out.rollup.success, 0);
+  assert.deepEqual(out.rollup.by_mode, { status_normalized: 1 });
+  assert.deepEqual(out.clusters.map((c) => c.failure_mode), ['status_normalized']);
   assert.equal(out.stats.critical, 0);
   assert.deepEqual(out.findings.map((f) => f.type), ['status_normalized']);
   assert.match(out.findings[0].description, /"queued" normalized to "skipped"/);
