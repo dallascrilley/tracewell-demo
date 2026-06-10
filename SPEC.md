@@ -330,7 +330,7 @@ The bundled `runs.json` contains:
 - **UI components:** Vanilla TypeScript + CSS custom properties; no React/Vue/Svelte — keeps the bundle under the 80kb microsite JS budget
 - **Data:** `runs.json` bundled as a static asset, loaded via `fetch('/tracewell/data/runs.json')` on first paint, stored in a module-level Map for the session
 - **Diff rendering:** `diff-match-patch` (4kb gzipped) for the prompt diff — the only non-zero third-party dependency
-- **No backend, no API keys, no environment variables** — all data is static; the "edit & replay" affordance re-renders from a second fixture (`runs-replay-fixture.json`), not a live model call
+- **No API keys, no environment variables, no stored traces** — the default data is static; the "Analyze your trace" panel posts pasted JSON to `POST /tracewell/analyze`, a Cloudflare Pages Function that classifies the trace server-side without live model calls
 
 ### Deploy path
 

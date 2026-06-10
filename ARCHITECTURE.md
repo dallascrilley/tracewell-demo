@@ -5,7 +5,7 @@
 - **Astro 5** — static site generator, outputs fully static HTML/JS/CSS
 - **TypeScript** — vanilla TS, no React/Vue/Svelte; keeps the bundle under 80 KB
 - **diff-match-patch** — 4 KB gzipped; character-level diff for the prompt comparison
-- **No backend, no API keys, no environment variables**
+- **Cloudflare Pages Function for trace analysis** — `POST /tracewell/analyze` classifies pasted traces server-side; no API keys, live model calls, storage, or environment variables
 
 ## Why vanilla TS instead of a framework
 
@@ -83,7 +83,7 @@ Runs are grouped by `(agent_id, failure_mode, step_name)` into clusters. Clickin
 
 ## What was cut for scope
 
-- **Real trace ingestion** — no SDK, no HTTP receiver, no OTLP
+- **Live trace ingestion** — no SDK, no persistent HTTP receiver, no OTLP stream; uploaded traces are analyzed on demand
 - **Multi-turn conversation diff** — system-prompt snapshots only
 - **Persistent sessions** — no localStorage, no DB
 - **Mobile optimization** — readable on mobile, but the dense instrument panel is desktop-first
