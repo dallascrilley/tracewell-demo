@@ -1,0 +1,1070 @@
+/* Q2See — Quote-to-Cash Flow Inspector
+   Visual direction: Fintech Ledger / Financial Statement
+   Cool near-white background · deep navy ink · single gold accent
+   Hairline rules · tabular figures · right-aligned money
+   Committed light — no dark mode ever. */
+
+/* Fonts: loaded via <link> in q2see/index.astro <head> for faster FCP (no render-blocking @import). */
+
+/* ─── Design tokens ────────────────────────────────────────────────────── */
+:root {
+  /* Surfaces — cool near-white financial statement palette */
+  --q2-surface:         oklch(98% 0.004 250);   /* page — cool near-white */
+  --q2-surface-raised:  oklch(100% 0 0);         /* panel / card white */
+  --q2-surface-row:     oklch(96.5% 0.004 250);  /* alternating ledger row fill */
+  --q2-surface-border:  oklch(89% 0.006 250);    /* hairline rule */
+  --q2-surface-hover:   oklch(95% 0.006 250);    /* hover row tint */
+
+  /* Ink — deep navy */
+  --q2-text-primary:    oklch(25% 0.03 255);     /* deep navy ink */
+  --q2-text-muted:      oklch(48% 0.02 250);     /* secondary ink */
+  --q2-text-mono:       oklch(38% 0.025 255);    /* mono / figures */
+
+  /* Node backgrounds — dark navy for legibility (TS hardcodes near-white label text) */
+  --q2-node-bg:         oklch(28% 0.05 255);     /* node rect fill — dark navy */
+  --q2-node-bg-hover:   oklch(33% 0.06 255);     /* node hover */
+
+  /* Status colors — semantic, kept minimal */
+  --q2-node-healthy:    oklch(55% 0.10 162);     /* muted sage — de-emphasized */
+  --q2-node-warning:    oklch(64% 0.13 72);      /* amber */
+  --q2-node-broken:     oklch(58% 0.18 25);      /* coral / red */
+  --q2-node-atrisk:     oklch(62% 0.14 55);      /* orange */
+
+  /* Gold — the ONE premium accent (use sparingly) */
+  --q2-accent:          oklch(72% 0.12 85);      /* premium gold */
+  --q2-accent-dim:      oklch(62% 0.10 85);      /* dimmed gold */
+
+  /* Primary ink (navy) used for selected/active highlights */
+  --q2-ink:             oklch(33% 0.07 255);     /* navy primary ink */
+
+  /* Fonts */
+  --q2-font-ui:         'Schibsted Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --q2-font-mono:       'Geist Mono', 'SF Mono', ui-monospace, monospace;
+
+  /* Spacing */
+  --q2-space-1: 0.25rem;
+  --q2-space-2: 0.5rem;
+  --q2-space-3: 0.75rem;
+  --q2-space-4: 1rem;
+  --q2-space-5: 1.25rem;
+  --q2-space-6: 1.5rem;
+  --q2-space-8: 2rem;
+
+  /* Motion */
+  --q2-dur-fast:  150ms;
+  --q2-dur-slow:  300ms;
+  --q2-ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --q2-ease-snap: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ─── Explicit light mode — neutralize any OS dark preference ────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --q2-surface:         oklch(98% 0.004 250);
+    --q2-surface-raised:  oklch(100% 0 0);
+    --q2-surface-row:     oklch(96.5% 0.004 250);
+    --q2-surface-border:  oklch(89% 0.006 250);
+    --q2-surface-hover:   oklch(95% 0.006 250);
+    --q2-text-primary:    oklch(25% 0.03 255);
+    --q2-text-muted:      oklch(48% 0.02 250);
+    --q2-text-mono:       oklch(38% 0.025 255);
+    --q2-node-bg:         oklch(28% 0.05 255);
+    --q2-node-bg-hover:   oklch(33% 0.06 255);
+    --q2-accent:          oklch(72% 0.12 85);
+    --q2-accent-dim:      oklch(62% 0.10 85);
+    --q2-ink:             oklch(33% 0.07 255);
+  }
+}
+
+/* ─── Reset & base ─────────────────────────────────────────────────────── */
+.q2-root {
+  box-sizing: border-box;
+  background: var(--q2-surface);
+  color: var(--q2-text-primary);
+  font-family: var(--q2-font-ui);
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Force explicit light palette at the body level so the shared chrome inherits correctly */
+body {
+  background: var(--q2-surface, oklch(98% 0.004 250));
+  color: var(--q2-text-primary, oklch(25% 0.03 255));
+}
+
+.q2-root *, .q2-root *::before, .q2-root *::after {
+  box-sizing: inherit;
+}
+
+/* Tabular figures everywhere for all currency/numbers */
+.q2-mono,
+.q2-field-value,
+.q2-finding-card-id,
+.q2-nav-logo,
+.q2-finding-system {
+  font-family: var(--q2-font-mono);
+  font-variant-numeric: tabular-nums lining-nums slashed-zero;
+  letter-spacing: -0.01em;
+}
+
+.q2-mono {
+  color: var(--q2-text-mono);
+}
+
+/* ─── Nav — hairline-ruled financial toolbar ───────────────────────────── */
+.q2-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--q2-space-3);
+  height: 44px;
+  padding: 0 var(--q2-space-6);
+  background: var(--q2-surface-raised);
+  border-bottom: 1px solid var(--q2-surface-border);
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.q2-nav-logo {
+  font-family: var(--q2-font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--q2-ink);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.q2-nav-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--q2-surface-border);
+}
+
+.q2-nav-label {
+  font-size: 11px;
+  color: var(--q2-text-muted);
+  letter-spacing: 0.01em;
+}
+
+.q2-nav-spacer { flex: 1; }
+
+.q2-nav-badge {
+  font-size: 10px;
+  font-family: var(--q2-font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--q2-text-muted);
+  background: var(--q2-surface-row);
+  border: 1px solid var(--q2-surface-border);
+  padding: 2px 7px;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+}
+
+/* ─── Synthetic banner — ledger-style notice strip ─────────────────────── */
+.q2-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--q2-space-3);
+  padding: 7px var(--q2-space-6);
+  background: oklch(97% 0.012 85 / 0.35);
+  border-bottom: 1px solid oklch(72% 0.12 85 / 0.35);
+  flex-shrink: 0;
+}
+
+.q2-banner-icon {
+  font-family: var(--q2-font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--q2-ink);
+  background: oklch(72% 0.12 85 / 0.18);
+  border: 1px solid oklch(72% 0.12 85 / 0.5);
+  padding: 2px 5px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: 0.08em;
+}
+
+.q2-banner-text {
+  font-size: 11px;
+  color: var(--q2-text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.q2-banner-text strong {
+  color: var(--q2-text-primary);
+}
+
+.q2-banner-dismiss {
+  background: none;
+  border: none;
+  color: var(--q2-text-muted);
+  font-size: 14px;
+  padding: 0 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: auto;
+  line-height: 1;
+}
+
+.q2-banner-dismiss:hover { color: var(--q2-text-primary); }
+
+/* ─── App shell ─────────────────────────────────────────────────────────── */
+.q2-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.q2-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  grid-template-rows: 1fr auto;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ─── Filter bar — statement-column selectors ──────────────────────────── */
+.q2-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--q2-space-2);
+  padding: 7px var(--q2-space-6);
+  background: var(--q2-surface-raised);
+  border-bottom: 1px solid var(--q2-surface-border);
+  flex-shrink: 0;
+}
+
+.q2-filter-label {
+  font-size: 10px;
+  color: var(--q2-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-right: var(--q2-space-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.q2-filter-pill {
+  font-size: 10px;
+  font-family: var(--q2-font-mono);
+  font-variant-numeric: tabular-nums;
+  padding: 3px 10px;
+  border-radius: 2px;
+  border: 1px solid var(--q2-surface-border);
+  background: transparent;
+  color: var(--q2-text-muted);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: border-color var(--q2-dur-fast) ease, color var(--q2-dur-fast) ease, background var(--q2-dur-fast) ease;
+}
+
+.q2-filter-pill:hover {
+  border-color: var(--q2-ink);
+  color: var(--q2-text-primary);
+}
+
+.q2-filter-pill.active {
+  background: var(--q2-ink);
+  border-color: var(--q2-ink);
+  color: oklch(98% 0.004 250);
+}
+
+.q2-filter-pill[data-severity="critical"].active {
+  background: var(--q2-node-broken);
+  border-color: var(--q2-node-broken);
+  color: oklch(100% 0 0);
+}
+
+.q2-filter-pill[data-severity="warning"].active {
+  background: var(--q2-node-warning);
+  border-color: var(--q2-node-warning);
+  color: oklch(100% 0 0);
+}
+
+.q2-filter-pill[data-severity="at-risk"].active {
+  background: var(--q2-node-atrisk);
+  border-color: var(--q2-node-atrisk);
+  color: oklch(100% 0 0);
+}
+
+.q2-filter-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--q2-surface-border);
+  margin: 0 var(--q2-space-2);
+}
+
+/* ─── Graph canvas — ledger statement background ────────────────────────── */
+.q2-graph-wrap {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--q2-surface);
+}
+
+/* Subtle horizontal ledger lines drawn via repeating gradient */
+.q2-graph-canvas-wrap {
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 71px,
+    oklch(89% 0.006 250 / 0.5) 71px,
+    oklch(89% 0.006 250 / 0.5) 72px
+  );
+}
+
+#q2-svg {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  user-select: none;
+}
+
+#q2-svg:active { cursor: grabbing; }
+
+#q2-graph-g {
+  transition: none;
+}
+
+/* Column headers */
+.q2-col-header {
+  font-family: var(--q2-font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  fill: var(--q2-text-muted);
+}
+
+/* Column guide lines */
+.q2-col-guide {
+  stroke: var(--q2-surface-border);
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+  opacity: 0.4;
+}
+
+/* ─── Nodes — dark navy ledger cards ────────────────────────────────────── */
+.q2-node {
+  cursor: pointer;
+  transition: opacity var(--q2-dur-fast) ease;
+}
+
+.q2-node-rect {
+  rx: 3;
+  ry: 3;
+  fill: var(--q2-node-bg);          /* dark navy — TS hardcodes near-white label text */
+  stroke: oklch(40% 0.04 255);
+  stroke-width: 1;
+  transition: stroke var(--q2-dur-fast) ease, fill var(--q2-dur-fast) ease, filter var(--q2-dur-fast) ease;
+}
+
+.q2-node:hover .q2-node-rect {
+  fill: var(--q2-node-bg-hover);
+  stroke-width: 1.5;
+}
+
+.q2-node.healthy .q2-node-rect {
+  stroke: oklch(45% 0.06 255 / 0.7);
+}
+
+.q2-node.warning .q2-node-rect {
+  stroke: var(--q2-node-warning);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 5px oklch(72% 0.18 80 / 0.35));
+}
+
+.q2-node.broken .q2-node-rect {
+  stroke: var(--q2-node-broken);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 7px oklch(60% 0.22 25 / 0.55));
+  animation: q2-pulse-broken 2.4s ease-in-out infinite;
+}
+
+.q2-node.at-risk .q2-node-rect {
+  stroke: var(--q2-node-atrisk);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 5px oklch(68% 0.20 55 / 0.35));
+}
+
+/* Gold outline on selected node — the ONE accent use in the graph */
+.q2-node.selected .q2-node-rect {
+  stroke: var(--q2-accent);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 6px oklch(72% 0.12 85 / 0.5));
+}
+
+.q2-node.dimmed {
+  opacity: 0.3;
+}
+
+.q2-node-label {
+  font-family: var(--q2-font-mono);
+  font-size: 9px;
+  fill: var(--q2-text-mono);
+  pointer-events: none;
+}
+
+.q2-node-account {
+  font-family: var(--q2-font-ui);
+  font-size: 10px;
+  fill: var(--q2-text-primary);
+  pointer-events: none;
+}
+
+.q2-node-dot {
+  pointer-events: none;
+}
+
+/* ─── Edges — thin hairline connectors ──────────────────────────────────── */
+.q2-edge {
+  fill: none;
+  stroke-linecap: round;
+  transition: opacity var(--q2-dur-fast) ease, stroke-width var(--q2-dur-fast) ease;
+}
+
+.q2-edge.healthy {
+  stroke: oklch(50% 0.04 255 / 0.35);
+  stroke-width: 1.5;
+}
+
+.q2-edge.warning {
+  stroke: var(--q2-node-warning);
+  stroke-width: 2;
+  opacity: 0.85;
+}
+
+.q2-edge.broken {
+  stroke: var(--q2-node-broken);
+  stroke-width: 2.5;
+  stroke-dasharray: 5 4;
+  opacity: 1;
+  animation: q2-dash-march 1.2s linear infinite;
+}
+
+.q2-edge.at-risk {
+  stroke: var(--q2-node-atrisk);
+  stroke-width: 2;
+  opacity: 0.85;
+}
+
+.q2-edge.dimmed {
+  opacity: 0.06 !important;
+}
+
+/* Edge arrowheads */
+.q2-arrow-healthy { fill: oklch(50% 0.04 255 / 0.5); }
+.q2-arrow-warning  { fill: var(--q2-node-warning); }
+.q2-arrow-broken   { fill: var(--q2-node-broken); }
+.q2-arrow-atrisk   { fill: var(--q2-node-atrisk); }
+
+/* ─── Zoom controls — hairline-bordered buttons ─────────────────────────── */
+.q2-zoom-controls {
+  position: absolute;
+  bottom: var(--q2-space-6);
+  left: var(--q2-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.q2-zoom-btn {
+  width: 26px;
+  height: 26px;
+  background: var(--q2-surface-raised);
+  border: 1px solid var(--q2-surface-border);
+  color: var(--q2-text-muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--q2-dur-fast) ease, border-color var(--q2-dur-fast) ease, background var(--q2-dur-fast) ease;
+}
+
+.q2-zoom-btn:hover {
+  color: var(--q2-text-primary);
+  border-color: var(--q2-ink);
+  background: var(--q2-surface-hover);
+}
+
+/* ─── Inspector panel — ledger record detail ────────────────────────────── */
+.q2-inspector {
+  grid-column: 2;
+  grid-row: 1;
+  background: var(--q2-surface-raised);
+  border-left: 1px solid var(--q2-surface-border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(0);
+  transition: transform var(--q2-dur-fast) var(--q2-ease-out);
+}
+
+.q2-inspector.hidden {
+  transform: translateX(100%);
+}
+
+.q2-inspector-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--q2-space-3);
+  padding: var(--q2-space-4) var(--q2-space-5);
+  border-bottom: 1px solid var(--q2-surface-border);
+  flex-shrink: 0;
+}
+
+.q2-inspector-severity {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--q2-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  margin-bottom: var(--q2-space-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.q2-inspector-severity.critical {
+  background: oklch(60% 0.22 25 / 0.12);
+  color: var(--q2-node-broken);
+  border: 1px solid oklch(60% 0.22 25 / 0.3);
+}
+
+.q2-inspector-severity.warning {
+  background: oklch(72% 0.18 80 / 0.10);
+  color: var(--q2-node-warning);
+  border: 1px solid oklch(72% 0.18 80 / 0.3);
+}
+
+.q2-inspector-severity.at-risk {
+  background: oklch(68% 0.20 55 / 0.10);
+  color: var(--q2-node-atrisk);
+  border: 1px solid oklch(68% 0.20 55 / 0.3);
+}
+
+.q2-inspector-severity.healthy {
+  background: oklch(72% 0.12 85 / 0.10);
+  color: var(--q2-accent);
+  border: 1px solid oklch(72% 0.12 85 / 0.3);
+}
+
+.q2-inspector-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--q2-text-primary);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.q2-inspector-close {
+  background: none;
+  border: none;
+  color: var(--q2-text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.q2-inspector-close:hover { color: var(--q2-text-primary); }
+
+.q2-inspector-body {
+  padding: var(--q2-space-4) var(--q2-space-5);
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ─── Field rows — ledger key/value pairs ───────────────────────────────── */
+.q2-field-group {
+  margin-bottom: var(--q2-space-4);
+}
+
+.q2-field-group-title {
+  font-size: 9px;
+  font-weight: 600;
+  font-family: var(--q2-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--q2-text-muted);
+  margin-bottom: var(--q2-space-2);
+  padding-bottom: var(--q2-space-1);
+  border-bottom: 1px solid var(--q2-surface-border);
+}
+
+.q2-field {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: var(--q2-space-2);
+  margin-bottom: 2px;
+  padding: 4px 0;
+  border-bottom: 1px solid oklch(89% 0.006 250 / 0.5);
+  align-items: baseline;
+}
+
+/* Alternating ledger-row tint */
+.q2-field:nth-child(even) {
+  background: var(--q2-surface-row);
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 1px;
+}
+
+.q2-field-key {
+  font-size: 10px;
+  color: var(--q2-text-muted);
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.q2-field-value {
+  font-family: var(--q2-font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--q2-text-mono);
+  word-break: break-all;
+  text-align: right;   /* right-align all values — statement convention */
+}
+
+.q2-field-value.highlight {
+  color: var(--q2-text-primary);
+  font-family: var(--q2-font-ui);
+  font-weight: 600;
+}
+
+/* ─── Finding sections ───────────────────────────────────────────────────── */
+.q2-finding-section {
+  margin-top: var(--q2-space-4);
+  padding-top: var(--q2-space-3);
+  border-top: 1px solid var(--q2-surface-border);
+}
+
+.q2-finding-section-label {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--q2-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-bottom: var(--q2-space-2);
+}
+
+.q2-finding-section-label.what { color: var(--q2-node-broken); }
+.q2-finding-section-label.who  { color: var(--q2-node-warning); }
+.q2-finding-section-label.fix  { color: var(--q2-accent); }
+
+.q2-finding-prose {
+  font-size: 12px;
+  color: var(--q2-text-primary);
+  line-height: 1.65;
+  margin: 0 0 var(--q2-space-2);
+}
+
+.q2-finding-system {
+  font-family: var(--q2-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+  color: var(--q2-text-mono);
+  background: var(--q2-surface-row);
+  border: 1px solid var(--q2-surface-border);
+  border-left: 2px solid var(--q2-node-warning);
+  border-radius: 2px;
+  padding: var(--q2-space-3) var(--q2-space-4);
+  margin-bottom: var(--q2-space-2);
+  white-space: pre-wrap;
+  line-height: 1.75;
+}
+
+.q2-finding-fix {
+  font-size: 11px;
+  font-family: var(--q2-font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--q2-text-primary);
+  background: oklch(72% 0.12 85 / 0.07);
+  border: 1px solid oklch(72% 0.12 85 / 0.25);
+  border-left: 2px solid var(--q2-accent);
+  border-radius: 2px;
+  padding: var(--q2-space-3) var(--q2-space-4);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+/* ─── Healthy indicator ──────────────────────────────────────────────────── */
+.q2-healthy-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--q2-space-2);
+  padding: var(--q2-space-3) var(--q2-space-4);
+  background: oklch(72% 0.12 85 / 0.07);
+  border: 1px solid oklch(72% 0.12 85 / 0.2);
+  border-radius: 2px;
+  margin-bottom: var(--q2-space-4);
+}
+
+.q2-healthy-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--q2-accent);
+  flex-shrink: 0;
+}
+
+.q2-healthy-text {
+  font-size: 11px;
+  color: var(--q2-accent-dim);
+}
+
+/* ─── Jump link ──────────────────────────────────────────────────────────── */
+.q2-jump-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--q2-font-mono);
+  font-size: 10px;
+  color: var(--q2-accent);
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.q2-jump-link:hover { color: var(--q2-ink); text-decoration: underline; }
+
+/* ─── Findings rail — bottom ledger strip ───────────────────────────────── */
+.q2-findings-rail {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  background: var(--q2-surface-raised);
+  border-top: 1px solid var(--q2-surface-border);
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  flex-shrink: 0;
+  height: 60px;
+}
+
+.q2-rail-header {
+  display: flex;
+  align-items: center;
+  gap: var(--q2-space-2);
+  padding: 0 var(--q2-space-5);
+  border-right: 1px solid var(--q2-surface-border);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.q2-rail-header-text {
+  font-size: 9px;
+  font-family: var(--q2-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--q2-text-muted);
+  font-weight: 600;
+}
+
+.q2-findings-list {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  flex: 1;
+  overflow-x: auto;
+}
+
+.q2-finding-card {
+  display: flex;
+  align-items: center;
+  gap: var(--q2-space-3);
+  padding: 0 var(--q2-space-5);
+  border-right: 1px solid var(--q2-surface-border);
+  cursor: pointer;
+  flex-shrink: 0;
+  min-width: 220px;
+  transition: background var(--q2-dur-fast) ease;
+}
+
+.q2-finding-card:hover {
+  background: var(--q2-surface-hover);
+}
+
+.q2-finding-card.active {
+  background: oklch(72% 0.12 85 / 0.08);
+  box-shadow: inset 2px 0 0 var(--q2-accent);
+}
+
+.q2-finding-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.q2-finding-dot.critical {
+  background: var(--q2-node-broken);
+  box-shadow: 0 0 5px oklch(60% 0.22 25 / 0.7);
+  animation: q2-dot-pulse 2.4s ease-in-out infinite;
+}
+.q2-finding-dot.warning  { background: var(--q2-node-warning); }
+.q2-finding-dot.at-risk  { background: var(--q2-node-atrisk); }
+
+.q2-finding-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.q2-finding-card-id {
+  font-family: var(--q2-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 9px;
+  color: var(--q2-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.q2-finding-card-account {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--q2-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.q2-finding-card-desc {
+  font-size: 10px;
+  color: var(--q2-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Animations — compositor-friendly, respects reduced-motion ─────────── */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes q2-pulse-broken {
+    0%, 100% { filter: drop-shadow(0 0 3px oklch(60% 0.22 25 / 0.45)); }
+    50%       { filter: drop-shadow(0 0 9px oklch(60% 0.22 25 / 0.75)); }
+  }
+
+  @keyframes q2-dot-pulse {
+    0%, 100% { box-shadow: 0 0 3px oklch(60% 0.22 25 / 0.6); }
+    50%       { box-shadow: 0 0 8px oklch(60% 0.22 25 / 0.9); }
+  }
+
+  @keyframes q2-dash-march {
+    to { stroke-dashoffset: -18; }
+  }
+}
+
+/* Static fallbacks for reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .q2-node.broken .q2-node-rect { animation: none; filter: drop-shadow(0 0 5px oklch(60% 0.22 25 / 0.5)); }
+  .q2-finding-dot.critical { animation: none; }
+  .q2-edge.broken { animation: none; }
+}
+
+/* ─── Empty / loading states ────────────────────────────────────────────── */
+.q2-inspector-empty {
+  padding: var(--q2-space-8) var(--q2-space-4);
+  text-align: center;
+  color: var(--q2-text-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.q2-inspector-empty-label {
+  font-size: 11px;
+  color: var(--q2-text-muted);
+  margin-top: var(--q2-space-4);
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .q2-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto auto;
+  }
+
+  .q2-inspector {
+    grid-column: 1;
+    grid-row: 2;
+    border-left: none;
+    border-top: 1px solid var(--q2-surface-border);
+    max-height: 45vh;
+    transform: none !important;
+  }
+
+  .q2-findings-rail {
+    grid-row: 3;
+  }
+
+  .q2-graph-wrap {
+    min-height: 45vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .q2-nav { padding: 0 var(--q2-space-4); }
+  .q2-nav-label { display: none; }
+  /* wrap, don't clip — every filter pill stays reachable at 390px */
+  .q2-filter-bar { padding: 6px var(--q2-space-4); flex-wrap: wrap; row-gap: 4px; }
+  .q2-filter-pill { font-size: 11px; padding: 6px 10px; min-height: 32px; }
+  .q2-finding-card { min-width: 180px; }
+  .q2-import-controls { flex-wrap: wrap; }
+}
+
+/* ─── Import panel (real backend) ───────────────────────────────────────── */
+.q2-nav-import {
+  font-family: var(--q2-font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--q2-ink);
+  background: oklch(33% 0.07 255 / 0.08);
+  border: 1px solid oklch(33% 0.07 255 / 0.25);
+  padding: 3px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background var(--q2-dur-fast) var(--q2-ease-out), border-color var(--q2-dur-fast) var(--q2-ease-out);
+}
+.q2-nav-import:hover {
+  background: oklch(33% 0.07 255 / 0.14);
+  border-color: var(--q2-ink);
+}
+
+.q2-nav-badge--live {
+  color: oklch(25% 0.03 255);
+  background: var(--q2-accent);
+  border-color: var(--q2-accent);
+}
+
+.q2-import-panel {
+  background: var(--q2-surface-raised);
+  border-bottom: 1px solid var(--q2-surface-border);
+  padding: var(--q2-space-4) var(--q2-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--q2-space-3);
+  animation: q2-import-in var(--q2-dur-slow) var(--q2-ease-out);
+}
+.q2-import-panel.hidden { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes q2-import-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+.q2-import-head {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--q2-text-muted);
+  max-width: 72ch;
+}
+.q2-import-head strong { color: var(--q2-text-primary); }
+.q2-import-head em { color: var(--q2-text-primary); font-style: normal; font-weight: 500; }
+
+.q2-import-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--q2-space-3);
+}
+
+.q2-import-filebtn,
+.q2-import-btn,
+.q2-import-link {
+  font-family: var(--q2-font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 2px;
+  border: 1px solid var(--q2-surface-border);
+  background: var(--q2-surface-row);
+  color: var(--q2-text-primary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color var(--q2-dur-fast) var(--q2-ease-out), background var(--q2-dur-fast) var(--q2-ease-out);
+}
+.q2-import-filebtn:hover,
+.q2-import-btn:hover,
+.q2-import-link:hover {
+  border-color: var(--q2-ink);
+  background: var(--q2-surface-hover);
+}
+
+.q2-import-btn--primary {
+  background: var(--q2-ink);
+  border-color: var(--q2-ink);
+  color: oklch(98% 0.004 250);
+}
+.q2-import-btn--primary:hover {
+  background: oklch(28% 0.05 255);
+  border-color: oklch(28% 0.05 255);
+}
+
+.q2-import-link { color: var(--q2-text-muted); }
+
+.q2-import-text {
+  width: 100%;
+  font-family: var(--q2-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--q2-text-primary);
+  background: var(--q2-surface);
+  border: 1px solid var(--q2-surface-border);
+  border-radius: 2px;
+  padding: var(--q2-space-3);
+  resize: vertical;
+}
+.q2-import-text:focus {
+  outline: none;
+  border-color: var(--q2-ink);
+  box-shadow: 0 0 0 2px oklch(33% 0.07 255 / 0.12);
+}
+
+.q2-import-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--q2-space-4);
+}
+
+.q2-import-status {
+  font-family: var(--q2-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  color: var(--q2-text-muted);
+}
+.q2-import-status--ok  { color: var(--q2-accent-dim); }
+.q2-import-status--err { color: var(--q2-node-broken); }
+
+/* Live data banner state */
+.q2-banner--live {
+  background: oklch(97% 0.012 85 / 0.4);
+  border-bottom-color: oklch(72% 0.12 85 / 0.4);
+}
+.q2-banner--live .q2-banner-icon {
+  color: oklch(25% 0.03 255);
+  background: var(--q2-accent);
+  border-color: var(--q2-accent);
+}
+.q2-banner--live .q2-banner-text strong { color: var(--q2-ink); }

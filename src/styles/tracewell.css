@@ -1684,7 +1684,20 @@ body {
 }
 
 @media (max-width: 600px) {
-  .tw-nav { padding: 0 var(--tw-space-4); }
+  /* nav must fit 390px — drop the redundant label + mode badge ("live
+     backend" and the banner already carry the synthetic framing) */
+  .tw-nav { padding: 0 var(--tw-space-4); gap: var(--tw-space-2); }
+  .tw-nav-label, .tw-nav-sep, #tw-mode-badge { display: none; }
+
+  /* inspector: stack the call tree above the detail pane — side-by-side
+     left a 154px detail column (unreadable, Compare unreachable) */
+  .tw-inspector-body { flex-direction: column; }
+  .tw-tree-panel {
+    width: 100%;
+    max-height: 32vh;
+    border-right: none;
+    border-bottom: 1px solid var(--tw-hairline);
+  }
   .tw-banner { padding: var(--tw-space-2) var(--tw-space-4); }
   .tw-run-cols,
   .tw-run-row { grid-template-columns: 1fr 80px; padding-left: var(--tw-space-4); padding-right: var(--tw-space-4); }
