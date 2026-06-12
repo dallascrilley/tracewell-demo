@@ -2,6 +2,8 @@
 // Tracewell — flight recorder for AI agents
 // Static page; all data loaded client-side from /data/runs.json
 import '../styles/tracewell.css';
+import GuidedTour from '../components/demo/GuidedTour.astro';
+import { GUIDED_TOURS } from '../data/guidedTours';
 const title = "Tracewell — Your agent failed in production. Here's the black box.";
 const description = "The flight recorder for AI agents. Every tool call, every token, every prompt — and the one diff that broke it.";
 ---
@@ -69,6 +71,8 @@ const description = "The flight recorder for AI agents. Every tool call, every t
         </p>
         <button class="tw-banner-dismiss" aria-label="Dismiss banner" id="tw-banner-dismiss">×</button>
       </div>
+
+      <GuidedTour {...GUIDED_TOURS.tracewell} />
 
       <!-- Hero: lead with the headline failure + a run-health rollup, above the fold -->
       <section class="tw-hero" id="tw-hero" aria-label="Top finding and run health">
