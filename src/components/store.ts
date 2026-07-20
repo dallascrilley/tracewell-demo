@@ -31,3 +31,10 @@ export function getLastSuccess(agentId: string, beforeTs: string): AgentRun | un
          new Date(r.started_at).getTime() < new Date(beforeTs).getTime()
   );
 }
+/** Reload the bundled synthetic demo dataset (clears any uploaded trace). */
+export async function reloadDemoRuns(): Promise<AgentRun[]> {
+  _runs = null;
+  _loadPromise = null;
+  return loadRuns();
+}
+

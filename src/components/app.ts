@@ -1,6 +1,6 @@
 // Tracewell app entry — bundled by Astro/Vite
 import type { AgentRun, AgentStep } from './types.js';
-import { loadRuns } from './store.js';
+import { loadRuns, reloadDemoRuns } from './store.js';
 import {
   fmtTokens, fmtLatency, fmtTimestamp, tokenClass,
   failureBadgeClass, statusLabel, stepStatusIcon
@@ -700,9 +700,10 @@ function wireDetail(detail: HTMLElement, run: AgentRun, step: AgentStep): void {
 }
 
 // ─── Import (real backend: POST /tracewell/analyze) ─────────────────
-function setModeBadge(label: string): void {
+function setModeBadge(label: string, uploaded = false): void {
   const badge = document.getElementById('tw-mode-badge');
   if (badge) badge.textContent = label;
+  document.getElementById('tw-restore-demo')?.classList.toggle('tw-hidden', !uploaded);
 }
 
 /** Swap in a new run set (uploaded or default) and re-render every view. */
@@ -732,7 +733,7 @@ async function runImport(raw: string, name: string): Promise<void> {
     const data = await res.json();
     if (!res.ok) throw new Error(data?.error || `Server returned ${res.status}`);
     setRuns(data.runs as AgentRun[]);
-    setModeBadge(`your trace · ${data.stats.findings} finding${data.stats.findings === 1 ? '' : 's'}`);
+    setModeBadge(`your trace · ${data.stats.findings} finding${data.stats.findings === 1 ? '' : 's'}`, true);
     if (status) {
       status.className = 'tw-import-status tw-import-status--ok';
       status.textContent = `Diagnosed ${name}: ${data.stats.findings} finding${data.stats.findings === 1 ? '' : 's'} across ${data.stats.runs} run${data.stats.runs === 1 ? '' : 's'} (${data.stats.critical} critical).`;
@@ -757,6 +758,41 @@ async function runImport(raw: string, name: string): Promise<void> {
     if (status) {
       status.className = 'tw-import-status tw-import-status--err';
       status.textContent = err instanceof Error ? err.message : 'Import failed.';
+    }
+  }
+}
+
+
+async function restoreDemo(): Promise<void> {
+  const status = document.getElementById('tw-import-status');
+  if (status) { status.textContent = 'Restoring demo runs…'; status.className = 'tw-import-status'; }
+  document.getElementById('tw-inspector')?.classList.add('tw-hidden');
+  document.getElementById('tw-layout')?.classList.remove('tw-inspector-open');
+  try {
+    setRuns(await reloadDemoRuns());
+    setModeBadge('synthetic · demo', false);
+    const banner = document.getElementById('tw-banner');
+    if (banner) {
+      banner.hidden = false;
+      banner.classList.remove('tw-banner--live');
+      const icon = banner.querySelector('.tw-banner-icon');
+      const textEl = banner.querySelector('.tw-banner-text');
+      if (icon) icon.textContent = 'SYN';
+      if (textEl) textEl.innerHTML = '<strong>Every number here is synthetic — and honestly labeled.</strong> ' +
+        'Tracewell is a portfolio demo: the 50 runs are fabricated, but the token counts are derived from real prompt lengths and the failure modes are ones you\'d actually get paged for. No live model, no real systems, no invented benchmarks. <em>That discipline is the point.</em>';
+      if (!sessionStorage.getItem('tw-banner-dismissed')) {
+        document.getElementById('tw-layout')?.classList.add('tw-banner-visible');
+      }
+    }
+    if (status) {
+      status.className = 'tw-import-status tw-import-status--ok';
+      status.textContent = 'Demo runs restored — 50 synthetic agent executions loaded.';
+    }
+  } catch (err) {
+    console.error('[Tracewell] Restore failed:', err);
+    if (status) {
+      status.className = 'tw-import-status tw-import-status--err';
+      status.textContent = err instanceof Error ? err.message : 'Could not restore demo runs.';
     }
   }
 }
@@ -802,6 +838,7 @@ function initImport(): void {
       if (s) { s.className = 'tw-import-status tw-import-status--err'; s.textContent = 'Could not load sample.'; }
     }
   });
+  document.getElementById('tw-restore-demo')?.addEventListener('click', () => { void restoreDemo(); });
 }
 
 // ─── Boot ───────────────────────────────────────────────────────────
