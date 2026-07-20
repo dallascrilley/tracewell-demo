@@ -108,7 +108,7 @@ function renderTimeline(runs: AgentRun[]): void {
   list.setAttribute('aria-busy', 'false');
 
   if (runs.length === 0) {
-    list.innerHTML = '<p class="tw-timeline-empty">No runs match. The agents behaved.</p>';
+    list.innerHTML = '<p class="tw-timeline-empty">No runs match this filter.</p>';
     return;
   }
 
@@ -264,7 +264,7 @@ function renderHero(): void {
     card.innerHTML = `
       <span class="tw-hero-eyebrow"><span class="tw-dot"></span>All clear</span>
       <h1 class="tw-hero-title">No failed runs in this trace.</h1>
-      <p class="tw-hero-desc">Every run completed without a diagnosed failure. Paste a trace with failures to see the black box light up.</p>`;
+      <p class="tw-hero-desc">Every run completed without a diagnosed failure. Paste a trace with failures to inspect the failed steps.</p>`;
     return;
   }
   const sevClass = headline.severity === 'warning' ? ' tw-sev-warning' : '';
@@ -280,7 +280,7 @@ function renderHero(): void {
       <span class="tw-hero-chip">owner <strong>${esc(headline.system_owner)}</strong></span>
     </div>
     <div class="tw-hero-fix"><strong>The fix —</strong> ${esc(headline.fix)}</div>
-    <button class="tw-hero-cta" id="tw-hero-cta" data-run-id="${esc(headline.run_id)}">Open the black box →</button>`;
+    <button class="tw-hero-cta" id="tw-hero-cta" data-run-id="${esc(headline.run_id)}">Inspect this failed run →</button>`;
 
   document.getElementById('tw-hero-cta')?.addEventListener('click', () => {
     const run = allRuns.find(r => r.id === headline.run_id);
@@ -372,7 +372,7 @@ const REDUCED_MOTION = typeof window !== 'undefined' &&
 
 function renderRibbon(container: HTMLElement, run: AgentRun): void {
   const steps = run.steps;
-  if (!steps.length) { container.innerHTML = '<div class="tw-ribbon-label">NO STEPS</div>'; return; }
+  if (!steps.length) { container.innerHTML = '<div class="tw-ribbon-label">No steps in this run</div>'; return; }
 
   const totalLat = steps.reduce((s, st) => s + st.latency_ms, 0) || 1;
   const maxTok = Math.max(...steps.map(st => st.tokens_in + st.tokens_out), 1);
@@ -386,7 +386,7 @@ function renderRibbon(container: HTMLElement, run: AgentRun): void {
   }).join('');
 
   container.innerHTML = `
-    <div class="tw-ribbon-label">TRACE RIBBON — drag or click to inspect step</div>
+    <div class="tw-ribbon-label">Step timeline — click a bar to inspect that step</div>
     <div class="tw-ribbon" id="tw-ribbon" role="slider" aria-valuemin="0" aria-valuemax="${steps.length - 1}" aria-valuenow="${currentStepIndex}">
       <div class="tw-ribbon-track">${ticks}</div>
       <div class="tw-playhead" id="tw-playhead"></div>
@@ -556,7 +556,7 @@ function renderDetail(run: AgentRun, step: AgentStep, idx: number): void {
 
   const prePrompt = (step.prompt_snapshot ?? step.output_snapshot ?? '').slice(0, 400);
   const fixBtn = isCanonical
-    ? `<button class="tw-replay-btn tw-replay-btn-fix" id="tw-replay-fix">Replay without the v4 block →</button>` : '';
+    ? `<button class="tw-replay-btn tw-replay-btn-fix" id="tw-replay-fix">Replay without the extra policy text →</button>` : '';
   const replayHtml = `
     <div class="tw-replay-notice">
       <span class="tw-replay-notice-icon">SYN</span>
@@ -564,7 +564,7 @@ function renderDetail(run: AgentRun, step: AgentStep, idx: number): void {
     </div>
     <textarea class="tw-replay-textarea" id="tw-replay-input" rows="5">${esc(prePrompt)}</textarea>
     <div class="tw-replay-actions">
-      <button class="tw-replay-btn" id="tw-replay-run">Edit &amp; replay (synthetic)</button>
+      <button class="tw-replay-btn" id="tw-replay-run">Try an edit (demo replay)</button>
       ${fixBtn}
     </div>
     <div id="tw-replay-output" style="display:none" class="tw-replay-output"></div>`;
@@ -654,7 +654,7 @@ function wireDetail(detail: HTMLElement, run: AgentRun, step: AgentStep): void {
     const out = detail.querySelector('#tw-replay-output') as HTMLElement;
     out.style.display = 'block';
     out.className = 'tw-replay-output';
-    out.textContent = 'Running synthetic replay…';
+    out.textContent = 'Running demo replay…';
     await new Promise(r => setTimeout(r, 600));
     try {
       const fixture = await fetch('/data/runs-replay-fixture.json').then(r => r.json());
@@ -670,7 +670,7 @@ function wireDetail(detail: HTMLElement, run: AgentRun, step: AgentStep): void {
       }
     } catch {
       out.className = 'tw-replay-output tw-replay-error';
-      out.textContent = 'Fixture load failed.';
+      out.textContent = 'Could not load the demo replay.';
     }
   });
 
@@ -678,7 +678,7 @@ function wireDetail(detail: HTMLElement, run: AgentRun, step: AgentStep): void {
     const out = detail.querySelector('#tw-replay-output') as HTMLElement;
     out.style.display = 'block';
     out.className = 'tw-replay-output';
-    out.textContent = 'Replaying without v4 injection…';
+    out.textContent = 'Replaying without the extra policy text…';
     await new Promise(r => setTimeout(r, 800));
     try {
       const fixture = await fetch('/data/runs-replay-fixture.json').then(r => r.json());
@@ -694,7 +694,7 @@ function wireDetail(detail: HTMLElement, run: AgentRun, step: AgentStep): void {
       }
     } catch {
       out.className = 'tw-replay-output tw-replay-error';
-      out.textContent = 'Fixture load failed.';
+      out.textContent = 'Could not load the demo replay.';
     }
   });
 }

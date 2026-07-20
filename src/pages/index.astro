@@ -34,18 +34,16 @@ const description = 'See the tool-call timeline, prompt diff, and token cost beh
         <span class="tw-nav-spacer"></span>
         <button class="tw-nav-import tw-hidden" id="tw-restore-demo" type="button">Back to demo runs</button>
         <button class="tw-nav-import" id="tw-import-toggle" aria-expanded="false" aria-controls="tw-import-panel">Analyze your trace</button>
-        <span class="tw-nav-badge tw-nav-badge--live">live backend</span>
+        <span class="tw-nav-badge tw-nav-badge--live">server analyze</span>
         <span class="tw-nav-badge" id="tw-mode-badge">synthetic · demo</span>
       </nav>
 
       <!-- Import panel — real backend (POST /tracewell/analyze) -->
       <div class="tw-import-panel tw-hidden" id="tw-import-panel" role="region" aria-label="Analyze an agent-run trace">
         <div class="tw-import-head">
-          <strong>Diagnose your own agent trace.</strong>
-          Paste or upload a recorded run trace — a single run object or a JSON array of runs
-          (<span class="tw-mono">id, agent_id, status, steps[…]</span>). The server classifies each run's
-          failure mode, pins the root-cause step, and returns a fix — computed entirely from <em>your</em> trace.
-          It analyzes a recorded export, not a live agent. Nothing is stored.
+          <strong>Diagnose a recorded agent run.</strong>
+          Paste or upload a JSON export of one run or a list of runs. The server finds the failure mode,
+          the step that broke, and a suggested fix — from <em>your</em> trace only. Nothing is stored.
         </div>
         <div class="tw-import-controls">
           <label class="tw-import-filebtn">
@@ -56,7 +54,7 @@ const description = 'See the tool-call timeline, prompt diff, and token cost beh
           <a class="tw-import-link" href="/data/sample-trace.json" download>Download sample</a>
         </div>
         <textarea id="tw-import-text" class="tw-import-text" rows="5" spellcheck="false"
-          placeholder='…or paste trace JSON here. Shape: [{ "id", "agent_id", "status": "failed|degraded|success", "failure_mode", "steps": [{ "name", "status", "tokens_in", "latency_ms", "error", "model_params" }] }]'></textarea>
+          placeholder='Paste trace JSON here (one run or a list of runs with steps, status, and token counts)'></textarea>
         <div class="tw-import-actions">
           <button class="tw-import-btn tw-import-btn--primary" id="tw-import-analyze" type="button">Analyze trace</button>
           <span class="tw-import-status" id="tw-import-status" role="status"></span>

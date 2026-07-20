@@ -12,8 +12,8 @@ export const GUIDED_TOURS = {
         body: 'Analyze your trace sends the run to the backend, which identifies the failure mode, root-cause step, and suggested repair.',
       },
       {
-        label: 'Inspect the black box',
-        body: 'Timeline, tool tree, prompt diff, and token readouts make the failed run reviewable without rerunning the agent.',
+        label: 'Inspect the failed run',
+        body: 'Timeline, tool tree, prompt diff, and token counts make the failed run reviewable without rerunning the agent.',
       },
     ],
   },
