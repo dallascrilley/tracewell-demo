@@ -23,6 +23,16 @@ pnpm dev
 
 Open `http://localhost:4321`. The demo loads synthetic data from `public/data/runs.json`.
 
+### Full stack (timeline + analyze backend)
+
+The **Analyze your trace** panel calls `POST /tracewell/analyze` via a Cloudflare Pages Function. To run the production build with that backend locally:
+
+```bash
+pnpm preview:demo
+```
+
+Open `http://127.0.0.1:4406`. Requires [Wrangler](https://developers.cloudflare.com/workers/wrangler/).
+
 ## Input schema — `POST /tracewell/analyze`
 
 The endpoint takes a JSON body with your trace JSON **as a string** in `raw`:
