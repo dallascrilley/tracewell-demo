@@ -180,8 +180,13 @@ export function buildClusters(runs: AgentRun[]): Cluster[] {
   return [...map.values()].sort((a, b) => b.run_ids.length - a.run_ids.length);
 }
 
+/** Signature demo run — pre-computed prompt diff and replay fix. */
+export const SIGNATURE_RUN_ID = 'run_8f2a1c';
+
 export function pickHeadline(findings: Finding[]): Finding | null {
   if (!findings.length) return null;
+  const signature = findings.find(f => f.run_id === SIGNATURE_RUN_ID);
+  if (signature) return signature;
   return [...findings].sort((a, b) => {
     const s = (SEVERITY_RANK[b.severity] || 0) - (SEVERITY_RANK[a.severity] || 0);
     if (s) return s;
